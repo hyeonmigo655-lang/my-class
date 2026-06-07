@@ -115,7 +115,7 @@
     background: white; border-radius: 24px; padding: 22px 16px 18px;
     text-align: center; box-shadow: var(--card-shadow); cursor: pointer;
     border: 4px solid transparent; transition: transform .2s, box-shadow .2s;
-    position: relative; overflow: hidden;
+    position: relative; overflow: hidden; z-index: 5;
   }
   .friend-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0;
@@ -132,12 +132,12 @@
     background: rgba(255,255,255,0.82); display: flex; align-items: center; justify-content: center;
     font-size: 1.3rem; color: var(--mint); border-radius: 20px;
   }
-  .friend-emoji { font-size: 3rem; display: block; margin-bottom: 6px; }
-  .friend-name { font-size: 1.1rem; color: var(--dark); margin-bottom: 4px; }
-  .friend-need { font-family: 'Nanum Round Square', sans-serif; font-size: 0.82rem; color: #777; line-height: 1.4; }
+  .friend-emoji { font-size: 3rem; display: block; margin-bottom: 6px; pointer-events: none; }
+  .friend-name { font-size: 1.1rem; color: var(--dark); margin-bottom: 4px; pointer-events: none; }
+  .friend-need { font-family: 'Nanum Round Square', sans-serif; font-size: 0.82rem; color: #777; line-height: 1.4; pointer-events: none; }
   .need-badge {
     display: inline-block; margin-top: 8px; padding: 4px 12px; border-radius: 20px;
-    font-size: 0.78rem; font-family: 'Nanum Round Square', sans-serif; font-weight: 800; color: white;
+    font-size: 0.78rem; font-family: 'Nanum Round Square', sans-serif; font-weight: 800; color: white; pointer-events: none;
   }
   .friend-card[data-id="0"] .need-badge { background: #FFB800; }
   .friend-card[data-id="1"] .need-badge { background: var(--mint); }
@@ -184,20 +184,17 @@
   .bubble-text { font-size: 1rem; color: var(--dark); line-height: 1.45; }
   .bubble-text strong { color: #FF6B6B; }
 
-  /* 카메라와 버튼이 절대로 서로 가리지 않게 영역 크기 조절 */
   .camera-zone { background: white; border-radius: 24px; overflow: hidden; box-shadow: var(--card-shadow); margin-bottom: 14px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; }
   .camera-zone video, .camera-zone canvas { width: 100%; height: auto; display: block; max-height: 300px; object-fit: cover; }
   .camera-placeholder { height: 240px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8f8f8; gap: 10px; color: #ccc; }
   .camera-placeholder span { font-size: 3rem; }
   .camera-placeholder p { font-size: 0.9rem; font-family: 'Nanum Round Square', sans-serif; }
 
-  /* 찍기 버튼이 무조건 카메라 아래 큼지막하게 고정되도록 수정 */
   .camera-controls { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 14px auto; }
   .cam-btn { width: 100%; padding: 16px; border: none; border-radius: 16px; font-family: 'Jua', sans-serif; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: transform .15s, box-shadow .15s; }
   .cam-btn:active { transform: scale(.96); }
   .cam-btn-open { background: linear-gradient(135deg, #667eea, #764ba2); color: white; box-shadow: 0 4px 14px rgba(102,126,234,0.4); }
   
-  /* 촬영 버튼은 카메라 열렸을 때 무조건 크게 보이도록 세팅 */
   .cam-btn-shoot { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; box-shadow: 0 4px 14px rgba(245,87,108,0.4); display: none; padding: 20px; font-size: 1.4rem; }
   .cam-btn-upload { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #333; font-size: 1rem; padding: 12px; }
 
@@ -515,7 +512,8 @@ function renderFriends() {
   const doneCount = Object.keys(completedFriends).length;
   grid.innerHTML = FRIENDS.map(f => {
     const done = completedFriends[f.id] !== undefined;
-    return `<div class="friend-card${done?' done':''}" data-id="${f.id}" onclick="${done?'':` selectFriend(${f.id})`}">
+    // 클릭 이벤트 오작동 방지를 위해 인라인 바인딩을 강력하게 수정
+    return `<div class="friend-card${done?' done':''}" data-id="${f.id}" onclick="if(!${done}) { selectFriend(${f.id}); }">
       <span class="friend-emoji">${f.emoji}</span>
       <div class="friend-name">${f.name}</div>
       <div class="friend-need">${f.need}</div>
@@ -524,32 +522,34 @@ function renderFriends() {
   }).join('');
   document.getElementById('progressBar').style.width = (doneCount/4*100)+'%';
   document.getElementById('progressLabel').textContent = `${doneCount} / 4 명 도움 완료`;
-  
-  if (doneCount === 4) {
-    setTimeout(showCompleteScreen, 800);
-  }
 }
 
 function selectFriend(id) {
-  currentFriendId = id; capturedPhotos = []; const f = FRIENDS[id];
+  currentFriendId = id; 
+  capturedPhotos = []; 
+  const f = FRIENDS[id];
+  
   document.getElementById('camFriendName').textContent = f.name;
   document.getElementById('camFriendNeed').textContent = f.need;
   document.getElementById('camFriendEmoji').textContent = f.emoji;
   document.getElementById('bubbleEmoji').textContent = f.emoji;
   document.getElementById('bubbleText').innerHTML = f.speech;
   document.getElementById('hintItems').innerHTML = f.hints.map(h=>`<span class="hint-item">${h}</span>`).join('');
-  resetCameraUI(); showScreen('cameraScreen');
+  
+  resetCameraUI(); 
+  showScreen('cameraScreen');
 }
 
 function resetCameraUI() {
   stopCamera();
-  document.getElementById('camPlaceholder').style.style.display='flex';
+  document.getElementById('camPlaceholder').style.display='flex';
   document.getElementById('camVideo').style.display='none';
   document.getElementById('btnOpen').style.display='block';
   document.getElementById('btnShoot').style.display='none';
   document.getElementById('submitBtn').style.display='none';
   document.getElementById('submitHint').style.display='none';
-  renderPhotoStrip(); updateDots();
+  renderPhotoStrip(); 
+  updateDots();
 }
 
 async function openCamera() {
@@ -565,7 +565,12 @@ async function openCamera() {
     document.getElementById('btnShoot').style.display='block';
     await video.play();
   } catch(e) {
-    alert('카메라 에러 발생. [앨범에서 고르기] 버튼을 사용해주세요.');
+    console.error(e);
+    alert('카메라 열기 실패! 하단의 [앨범에서 고르기] 버튼을 이용해 주세요.');
+    // 카메라가 막혀도 강제로 레이아웃 유지되도록 예외 처리
+    document.getElementById('camPlaceholder').style.display='flex';
+    document.getElementById('btnOpen').style.display='block';
+    document.getElementById('btnShoot').style.display='none';
   }
 }
 
@@ -575,11 +580,15 @@ function shoot() {
   const canvas = document.getElementById('camCanvas');
   canvas.width = 640; canvas.height = 480; 
   const ctx = canvas.getContext('2d');
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-  const dataUrl = canvas.toDataURL('image/jpeg', 0.4);
-  capturedPhotos.push(dataUrl);
-  renderPhotoStrip(); updateDots(); checkReady();
-  if (capturedPhotos.length >= MAX_PHOTOS) { stopCamera(); }
+  try {
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.4);
+    capturedPhotos.push(dataUrl);
+    renderPhotoStrip(); updateDots(); checkReady();
+    if (capturedPhotos.length >= MAX_PHOTOS) { stopCamera(); }
+  } catch(err) {
+    alert('촬영 중 일시적 오류가 발생했습니다. 앨범에서 고르기를 사용해 보세요.');
+  }
 }
 
 function stopCamera() { if (cameraStream) { cameraStream.getTracks().forEach(t=>t.stop()); cameraStream = null; } }
