@@ -411,8 +411,8 @@
 </section>
 
 <script>
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-HfgERi3IoHqm5jGoE1tp3leqyCmIsPZ3wTyWmugAjBARuCZ8NhtNPNcoAbgQUykcdQ/exec';
-
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby_vYLY7CLgf6R37xLqIbeiwAamDep4J8PvON11kx3ULcyUIansuBzio5x4NEa4fqFOXA/exec';
+  
 const FIXED_STUDENT_NAMES = [
   "강다율", "고다영", "고다온", "김아현", "박새별", 
   "양서아", "정하윤", "김담호", "김재승", "김형호", 
@@ -667,29 +667,62 @@ function checkReady() {
   }
 }
 
-function submitPhotos() {
+async function submitPhotos() {
   if (capturedPhotos.length !== MAX_PHOTOS) return;
-  completedFriends[currentFriendId] = [...capturedPhotos];
-  stopCamera();
   
-  const f = FRIENDS[currentFriendId];
-  document.getElementById('resultEmoji').textContent = f.resultEmoji;
-  document.getElementById('resultTitle').textContent = f.resultTitle;
-  document.getElementById('resultMessage').innerHTML = f.resultMsg;
+  // 선택된 학생들의 이름을 가져옵니다 (예: 강다율&김아현)
+  const studentNames = selectedStudents.map(s => s.name).join('&');
   
-  const pZone = document.getElementById('resultPhotos');
-  pZone.innerHTML = capturedPhotos.map(p => `<img src="${p}">`).join('');
-  
-  const doneCount = Object.keys(completedFriends).length;
-  const btnMore = document.getElementById('btnMoreFriends');
-  if (doneCount === 4) {
-    btnMore.textContent = "모든 친구 완료! 결과 보기 🎁";
-    btnMore.onclick = function() { showCompleteScreen(); };
-  } else {
-    btnMore.textContent = "다른 친구 돕기 💪";
-    btnMore.onclick = function() { renderFriends(); showScreen('selectScreen'); };
+  document.getElementById('sendOverlay').classList.remove('hidden');
+
+  try {
+    // 4장의 사진을 각각 구글 드라이브로 전송
+    const uploadPromises = capturedPhotos.map((photoData, index) => {
+      const payload = {
+        friendName: FRIENDS[currentFriendId].name,
+        photo: photoData,
+        fileName: `${studentNames}_${FRIENDS[currentFriendId].name}_${index + 1}.jpg`
+      };
+
+      return fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).then(res => res.json());
+    });
+
+    await Promise.all(uploadPromises);
+    
+    // 전송 후 기존 결과 화면 처리
+    completedFriends[currentFriendId] = [...capturedPhotos];
+    stopCamera();
+    
+    const f = FRIENDS[currentFriendId];
+    document.getElementById('resultEmoji').textContent = f.resultEmoji;
+    document.getElementById('resultTitle').textContent = f.resultTitle;
+    document.getElementById('resultMessage').innerHTML = f.resultMsg;
+    
+    const pZone = document.getElementById('resultPhotos');
+    pZone.innerHTML = capturedPhotos.map(p => `<img src="${p}">`).join('');
+    
+    const doneCount = Object.keys(completedFriends).length;
+    const btnMore = document.getElementById('btnMoreFriends');
+    
+    if (doneCount === 4) {
+      btnMore.textContent = "모든 친구 완료! 결과 보기 🎁";
+      btnMore.onclick = function() { showCompleteScreen(); };
+    } else {
+      btnMore.textContent = "다른 친구 돕기 💪";
+      btnMore.onclick = function() { renderFriends(); showScreen('selectScreen'); };
+    }
+    
+    showScreen('resultScreen');
+  } catch (error) {
+    console.error("전송 실패:", error);
+    alert("전송 중 오류가 발생했습니다. 인터넷 연결을 확인해주세요.");
+  } finally {
+    document.getElementById('sendOverlay').classList.add('hidden');
   }
-  showScreen('resultScreen');
 }
 
 function showCompleteScreen() {
@@ -705,55 +738,11 @@ function showCompleteScreen() {
       <div class="gallery-caption">${f.name} 완수</div>
     </div>`;
   }).join('');
-  
-  sendDataToGoogle();
-}
-
-function sendDataToGoogle() {
-  const overlay = document.getElementById('sendOverlay');
-  overlay.classList.remove('hidden');
-  
-  const payload = {
-    studentName: studentNameText,
-    timestamp: new Date().toISOString(),
-    friend0: (completedFriends[0] || []).join('||'),
-    friend1: (completedFriends[1] || []).join('||'),
-    friend2: (completedFriends[2] || []).join('||'),
-    friend3: (completedFriends[3] || []).join('||')
-  };
-  
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .then(() => {
-    overlay.classList.add('hidden');
-    showSendResult(true);
-  })
-  .catch(err => {
-    console.error(err);
-    overlay.classList.add('hidden');
-    showSendResult(false);
-  });
-}
-
-function showSendResult(success) {
-  const box = document.getElementById('sendResultBox');
-  box.style.display = 'block';
-  if (success) {
-    document.getElementById('sendResultIcon').textContent = '🎉';
-    document.getElementById('sendResultTitle').textContent = '선생님께 전송 완료!';
-    document.getElementById('sendResultSub').textContent = '우리 반 나눔 기록이 시트에 예쁘게 담겼어요.';
-  } else {
-    document.getElementById('sendResultIcon').textContent = '😥';
-    document.getElementById('sendResultTitle').textContent = '전송에 실패했어요';
-    document.getElementById('sendResultSub').textContent = '인터넷 연결을 확인하고 다시 시도해보세요.';
-  }
 }
 
 function restartAll() {
+  location.reload();
+}
   selectedStudents = [];
   completedFriends = {};
   currentFriendId = null;
