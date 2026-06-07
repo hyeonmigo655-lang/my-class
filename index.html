@@ -75,7 +75,7 @@
     transition: all 0.2s ease; position: relative; display: flex; align-items: center; justify-content: center;
     min-height: 70px;
   }
-  .student-card p { font-size: 1.3rem; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+  .student-card p { font-size: 1.3rem; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .student-card.selected { border-color: #6BCB77; background-color: #E8F5E9; transform: scale(1.03); }
   .student-card.selected::after {
     content: '✔'; position: absolute; top: 6px; right: 6px;
@@ -90,7 +90,7 @@
     min-height: 70px; transition: all 0.2s;
   }
   .add-card:hover { background: #FFEAA7; transform: translateY(-2px); }
-  .add-card p { font-size: 1.05rem; color: #E58E26; font-weight: bold; pointer-events: none; }
+  .add-card p { font-size: 1.05rem; color: #E58E26; font-weight: bold; }
 
   .selection-bar {
     background: white; border-radius: 20px; padding: 15px 20px;
@@ -115,7 +115,7 @@
     background: white; border-radius: 24px; padding: 22px 16px 18px;
     text-align: center; box-shadow: var(--card-shadow); cursor: pointer;
     border: 4px solid transparent; transition: transform .2s, box-shadow .2s;
-    position: relative; overflow: hidden; z-index: 5;
+    position: relative; overflow: hidden;
   }
   .friend-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0;
@@ -132,12 +132,12 @@
     background: rgba(255,255,255,0.82); display: flex; align-items: center; justify-content: center;
     font-size: 1.3rem; color: var(--mint); border-radius: 20px;
   }
-  .friend-emoji { font-size: 3rem; display: block; margin-bottom: 6px; pointer-events: none; }
-  .friend-name { font-size: 1.1rem; color: var(--dark); margin-bottom: 4px; pointer-events: none; }
-  .friend-need { font-family: 'Nanum Round Square', sans-serif; font-size: 0.82rem; color: #777; line-height: 1.4; pointer-events: none; }
+  .friend-emoji { font-size: 3rem; display: block; margin-bottom: 6px; }
+  .friend-name { font-size: 1.1rem; color: var(--dark); margin-bottom: 4px; }
+  .friend-need { font-family: 'Nanum Round Square', sans-serif; font-size: 0.82rem; color: #777; line-height: 1.4; }
   .need-badge {
     display: inline-block; margin-top: 8px; padding: 4px 12px; border-radius: 20px;
-    font-size: 0.78rem; font-family: 'Nanum Round Square', sans-serif; font-weight: 800; color: white; pointer-events: none;
+    font-size: 0.78rem; font-family: 'Nanum Round Square', sans-serif; font-weight: 800; color: white;
   }
   .friend-card[data-id="0"] .need-badge { background: #FFB800; }
   .friend-card[data-id="1"] .need-badge { background: var(--mint); }
@@ -162,7 +162,7 @@
   .camera-friend-name { font-size: 1rem; color: var(--dark); }
   .camera-friend-need { font-family: 'Nanum Round Square', sans-serif; font-size: 0.8rem; color: #888; }
   .camera-friend-emoji { font-size: 2rem; }
-  .camera-body { padding: 20px; text-align: center; }
+  .camera-body { padding: 20px; }
 
   .photo-count-bar { display: flex; gap: 10px; justify-content: center; margin-bottom: 16px; }
   .photo-dot {
@@ -176,7 +176,7 @@
 
   .speech-bubble {
     background: white; border-radius: 20px; padding: 16px 20px;
-    box-shadow: var(--card-shadow); margin-bottom: 16px; text-align: left;
+    box-shadow: var(--card-shadow); margin-bottom: 16px;
     position: relative; display: flex; align-items: center; gap: 14px;
   }
   .speech-bubble::after { content: ''; position: absolute; bottom: -12px; left: 30px; border: 12px solid transparent; border-top-color: white; border-bottom: 0; }
@@ -184,32 +184,31 @@
   .bubble-text { font-size: 1rem; color: var(--dark); line-height: 1.45; }
   .bubble-text strong { color: #FF6B6B; }
 
-  .camera-zone { background: white; border-radius: 24px; overflow: hidden; box-shadow: var(--card-shadow); margin-bottom: 14px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; }
-  .camera-zone video, .camera-zone canvas { width: 100%; height: auto; display: block; max-height: 300px; object-fit: cover; }
+  .camera-zone { background: white; border-radius: 24px; overflow: hidden; box-shadow: var(--card-shadow); margin-bottom: 14px; }
+  .camera-zone video, .camera-zone canvas { width: 100%; display: block; }
   .camera-placeholder { height: 240px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8f8f8; gap: 10px; color: #ccc; }
   .camera-placeholder span { font-size: 3rem; }
   .camera-placeholder p { font-size: 0.9rem; font-family: 'Nanum Round Square', sans-serif; }
 
-  .camera-controls { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 14px auto; }
-  .cam-btn { width: 100%; padding: 16px; border: none; border-radius: 16px; font-family: 'Jua', sans-serif; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: transform .15s, box-shadow .15s; }
+  .camera-controls { display: flex; gap: 10px; margin-bottom: 14px; }
+  .cam-btn { flex: 1; padding: 14px 8px; border: none; border-radius: 16px; font-family: 'Jua', sans-serif; font-size: 0.95rem; cursor: pointer; transition: transform .15s, box-shadow .15s; }
   .cam-btn:active { transform: scale(.96); }
   .cam-btn-open { background: linear-gradient(135deg, #667eea, #764ba2); color: white; box-shadow: 0 4px 14px rgba(102,126,234,0.4); }
-  
-  .cam-btn-shoot { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; box-shadow: 0 4px 14px rgba(245,87,108,0.4); display: none; padding: 20px; font-size: 1.4rem; }
-  .cam-btn-upload { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #333; font-size: 1rem; padding: 12px; }
+  .cam-btn-shoot { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; box-shadow: 0 4px 14px rgba(245,87,108,0.4); display: none; }
+  .cam-btn-upload { background: linear-gradient(135deg, #43e97b, #38f9d7); color: white; box-shadow: 0 4px 14px rgba(67,233,123,0.35); }
 
-  .hint-box { background: linear-gradient(135deg, #fff9c4, #fff3e0); border-radius: 16px; padding: 14px 16px; margin: 14px auto; border-left: 4px solid var(--sunny); max-width: 400px; text-align: left; }
+  .hint-box { background: linear-gradient(135deg, #fff9c4, #fff3e0); border-radius: 16px; padding: 14px 16px; margin-bottom: 14px; border-left: 4px solid var(--sunny); }
   .hint-title { font-size: 0.85rem; color: #D4A017; margin-bottom: 6px; }
   .hint-items { display: flex; flex-wrap: wrap; gap: 8px; }
   .hint-item { background: white; border-radius: 20px; padding: 4px 12px; font-size: 0.82rem; font-family: 'Nanum Round Square', sans-serif; color: #555; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
 
-  .multi-preview { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; margin: 14px auto; max-width: 400px; }
-  .multi-preview-item { flex: 0 0 auto; position: relative; width: 80px; height: 80px; border-radius: 14px; overflow: hidden; box-shadow: var(--card-shadow); }
+  .multi-preview { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 14px; }
+  .multi-preview-item { flex: 0 0 auto; position: relative; width: 100px; height: 100px; border-radius: 14px; overflow: hidden; box-shadow: var(--card-shadow); }
   .multi-preview-item img { width: 100%; height: 100%; object-fit: cover; }
   .multi-preview-item .del-btn { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.55); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .multi-preview-slot { flex: 0 0 auto; width: 80px; height: 80px; border-radius: 14px; border: 3px dashed #ddd; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ddd; background: #fafafa; }
+  .multi-preview-slot { flex: 0 0 auto; width: 100px; height: 100px; border-radius: 14px; border: 3px dashed #ddd; display: flex; align-items: center; justify-content: center; font-size: 2rem; color: #ddd; background: #fafafa; }
 
-  .submit-btn { width: 100%; max-width: 400px; margin: 0 auto; background: linear-gradient(135deg, #FF6B6B, #FF8E53); color: white; border: none; padding: 18px; border-radius: 16px; font-family: 'Jua', sans-serif; font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 16px rgba(255,107,107,0.35); transition: transform .15s; display: none; }
+  .submit-btn { width: 100%; background: linear-gradient(135deg, #FF6B6B, #FF8E53); color: white; border: none; padding: 16px; border-radius: 16px; font-family: 'Jua', sans-serif; font-size: 1.2rem; cursor: pointer; box-shadow: 0 4px 16px rgba(255,107,107,0.35); transition: transform .15s; display: none; }
   .submit-btn:hover { transform: translateY(-2px); }
   .submit-hint { text-align: center; font-family: 'Nanum Round Square', sans-serif; font-size: 0.82rem; color: #aaa; margin-top: 8px; display: none; }
 
@@ -356,7 +355,7 @@
 
     <div class="camera-controls">
       <button class="cam-btn cam-btn-open" id="btnOpen" onclick="openCamera()">📷 카메라 열기</button>
-      <button class="cam-btn cam-btn-shoot" id="btnShoot" onclick="shoot()">📸 찰칵! 사진 찍기</button>
+      <button class="cam-btn cam-btn-shoot" id="btnShoot" onclick="shoot()">📸 찍기!</button>
       <button class="cam-btn cam-btn-upload" onclick="triggerUpload()">🖼️ 앨범에서 고르기</button>
     </div>
     <input type="file" id="fileInput" accept="image/*" multiple>
@@ -411,7 +410,8 @@
 </section>
 
 <script>
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-HfgERi3IoHqm5jGoE1tp3leqyCmIsPZ3wTyWmugAjBARuCZ8NhtNPNcoAbgQUykcdQ/exec';
+// 🌟 선생님이 새로 배포하신 최신 구글 웹앱 URL이 자동으로 연동되었습니다!
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw1AcwwNRBMUW6SXPgHF935Fr7KNOdyv9NdGS6QY1BnnbgE7mf2Aep_BDv933ywo1dI7g/exec';
 
 const FIXED_STUDENT_NAMES = [
   "강다율", "고다영", "고다온", "김아현", "박새별", 
@@ -435,21 +435,11 @@ const FRIENDS = [
 
 const MAX_PHOTOS = 4;
 let selectedStudents = []; 
-let studentNameText = '';    
+let studentNameText = '';  
 let currentFriendId = null;
 let capturedPhotos = [];        
 let completedFriends = {};      
 let cameraStream = null;
-
-window.onload = function() {
-  renderStudentGrid();
-};
-
-function showScreen(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
-  window.scrollTo(0,0);
-}
 
 function renderStudentGrid() {
   const grid = document.getElementById('studentGrid');
@@ -499,96 +489,65 @@ function updateSelectionUI() {
   }
 }
 
-// 다음 활동으로 넘어갈 때 꼬이던 순서를 완벽히 고정
 function confirmNames() {
   if (selectedStudents.length !== 2) return;
   studentNameText = `${selectedStudents[0].name}, ${selectedStudents[1].name}`;
-  
-  // 1. 글자 먼저 안전하게 교체
   document.getElementById('selectTitle').textContent = `${studentNameText} 친구들! 어떤 친구를 도와줄까요?`;
-  
-  // 2. 중요!! 목록을 확실하게 먼저 그리고 나서 화면을 전환
-  renderFriends();
   showScreen('selectScreen');
 }
 
 function renderFriends() {
   const grid = document.getElementById('friendsGrid');
-  if (!grid) return; // 방어 코드 추가
-  
   const doneCount = Object.keys(completedFriends).length;
-  
-  // 패드 환경에서 클릭이 100% 되도록 함수를 분리하여 단단하게 정렬
-  let html = '';
-  FRIENDS.forEach(f => {
+  grid.innerHTML = FRIENDS.map(f => {
     const done = completedFriends[f.id] !== undefined;
-    html += `
-      <div class="friend-card ${done ? 'done' : ''}" data-id="${f.id}" onclick="handleFriendClick(${f.id}, ${done})">
-        <span class="friend-emoji">${f.emoji}</span>
-        <div class="friend-name">${f.name}</div>
-        <div class="friend-need">${f.need}</div>
-        <span class="need-badge">${f.badge}</span>
-      </div>
-    `;
-  });
-  
-  grid.innerHTML = html;
+    return `<div class="friend-card${done?' done':''}" data-id="${f.id}" onclick="${done?'':` selectFriend(${f.id})`}">
+      <span class="friend-emoji">${f.emoji}</span>
+      <div class="friend-name">${f.name}</div>
+      <div class="friend-need">${f.need}</div>
+      <span class="need-badge">${f.badge}</span>
+    </div>`;
+  }).join('');
   document.getElementById('progressBar').style.width = (doneCount/4*100)+'%';
   document.getElementById('progressLabel').textContent = `${doneCount} / 4 명 도움 완료`;
 }
 
-// 인라인 오류 방지를 위한 독립 클릭 핸들러 작동 구조 구현
-function handleFriendClick(id, isDone) {
-  if (isDone) return;
-  selectFriend(id);
-}
-
 function selectFriend(id) {
-  currentFriendId = id; 
-  capturedPhotos = []; 
-  const f = FRIENDS[id];
-  
+  currentFriendId = id; capturedPhotos = []; const f = FRIENDS[id];
   document.getElementById('camFriendName').textContent = f.name;
   document.getElementById('camFriendNeed').textContent = f.need;
   document.getElementById('camFriendEmoji').textContent = f.emoji;
   document.getElementById('bubbleEmoji').textContent = f.emoji;
   document.getElementById('bubbleText').innerHTML = f.speech;
   document.getElementById('hintItems').innerHTML = f.hints.map(h=>`<span class="hint-item">${h}</span>`).join('');
-  
-  resetCameraUI(); 
-  showScreen('cameraScreen');
+  resetCameraUI(); showScreen('cameraScreen');
 }
 
 function resetCameraUI() {
   stopCamera();
   document.getElementById('camPlaceholder').style.display='flex';
   document.getElementById('camVideo').style.display='none';
-  document.getElementById('btnOpen').style.display='block';
+  document.getElementById('btnOpen').style.display='';
   document.getElementById('btnShoot').style.display='none';
   document.getElementById('submitBtn').style.display='none';
   document.getElementById('submitHint').style.display='none';
-  renderPhotoStrip(); 
-  updateDots();
+  renderPhotoStrip(); updateDots();
 }
 
 async function openCamera() {
   try {
     if (cameraStream) stopCamera();
-    const constraints = { video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } }, audio: false };
+    const constraints = { video: { facingMode: 'environment', width: { ideal: 400 }, height: { ideal: 300 } }, audio: false };
     cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
     const video = document.getElementById('camVideo');
     video.srcObject = cameraStream;
     document.getElementById('camPlaceholder').style.display='none';
     video.style.display='block';
     document.getElementById('btnOpen').style.display='none';
-    document.getElementById('btnShoot').style.display='block';
+    document.getElementById('btnShoot').style.display='';
     await video.play();
   } catch(e) {
-    console.error(e);
-    alert('카메라 열기 실패! 하단의 [앨범에서 고르기] 버튼을 이용해 주세요.');
-    document.getElementById('camPlaceholder').style.display='flex';
-    document.getElementById('btnOpen').style.display='block';
-    document.getElementById('btnShoot').style.display='none';
+    alert('카메라 에러 발생. [앨범에서 고르기] 버튼을 사용해주세요.');
   }
 }
 
@@ -596,17 +555,13 @@ function shoot() {
   if (capturedPhotos.length >= MAX_PHOTOS) return;
   const video = document.getElementById('camVideo');
   const canvas = document.getElementById('camCanvas');
-  canvas.width = 640; canvas.height = 480; 
+  canvas.width = 400; canvas.height = 300; 
   const ctx = canvas.getContext('2d');
-  try {
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.4);
-    capturedPhotos.push(dataUrl);
-    renderPhotoStrip(); updateDots(); checkReady();
-    if (capturedPhotos.length >= MAX_PHOTOS) { stopCamera(); }
-  } catch(err) {
-    alert('촬영 중 일시적 오류가 발생했습니다. 앨범에서 고르기를 사용해 보세요.');
-  }
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const dataUrl = canvas.toDataURL('image/jpeg', 0.5); // 압축 최적화
+  capturedPhotos.push(dataUrl);
+  renderPhotoStrip(); updateDots(); checkReady();
+  if (capturedPhotos.length >= MAX_PHOTOS) { stopCamera(); resetCameraUI(); }
 }
 
 function stopCamera() { if (cameraStream) { cameraStream.getTracks().forEach(t=>t.stop()); cameraStream = null; } }
@@ -614,155 +569,131 @@ function triggerUpload() { document.getElementById('fileInput').click(); }
 
 document.getElementById('fileInput').addEventListener('change', function(e) {
   const files = Array.from(e.target.files);
-  files.forEach(file => {
-    if (capturedPhotos.length >= MAX_PHOTOS) return;
+  const remaining = MAX_PHOTOS - capturedPhotos.length;
+  const toLoad = files.slice(0, remaining);
+  let loaded = 0; if(toLoad.length === 0) return;
+  
+  toLoad.forEach(file => {
     const reader = new FileReader();
-    reader.onload = function(evt) {
-      if (capturedPhotos.length < MAX_PHOTOS) {
-        capturedPhotos.push(evt.target.result);
-        renderPhotoStrip(); updateDots(); checkReady();
+    reader.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.getElementById('camCanvas');
+        canvas.width = 400; canvas.height = 300;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, 400, 300);
+        capturedPhotos.push(canvas.toDataURL('image/jpeg', 0.5));
+        loaded++;
+        if (loaded === toLoad.length) { renderPhotoStrip(); updateDots(); checkReady(); }
       }
+      img.src = ev.target.result;
     };
     reader.readAsDataURL(file);
   });
 });
 
 function renderPhotoStrip() {
-  const preview = document.getElementById('multiPreview');
-  let html = '';
-  for(let i=0; i<MAX_PHOTOS; i++) {
-    if (capturedPhotos[i]) {
-      html += `<div class="multi-preview-item">
-        <img src="${capturedPhotos[i]}">
-        <button class="del-btn" onclick="deletePhoto(${i})">X</button>
-      </div>`;
-    } else {
-      html += `<div class="multi-preview-slot">?</div>`;
-    }
-  }
-  preview.innerHTML = html;
+  const strip = document.getElementById('multiPreview');
+  let html = capturedPhotos.map((src, i) => `<div class="multi-preview-item"><img src="${src}"><button class="del-btn" onclick="removePhoto(${i})">✕</button></div>`).join('');
+  for (let i = capturedPhotos.length; i < MAX_PHOTOS; i++) { html += `<div class="multi-preview-slot">${i+1}</div>`; }
+  strip.innerHTML = html;
 }
 
-function deletePhoto(idx) {
-  capturedPhotos.splice(idx, 1);
-  renderPhotoStrip(); updateDots(); checkReady();
-}
-
+function removePhoto(idx) { capturedPhotos.splice(idx, 1); renderPhotoStrip(); updateDots(); checkReady(); }
 function updateDots() {
+  for (let i = 0; i < MAX_PHOTOS; i++) {
+    const dot = document.getElementById('dot'+i);
+    if (i < capturedPhotos.length) { dot.classList.add('filled'); dot.textContent = '✓'; }
+    else { dot.classList.remove('filled'); dot.textContent = i+1; }
+  }
   document.getElementById('photoCountText').textContent = capturedPhotos.length;
-  for(let i=0; i<MAX_PHOTOS; i++) {
-    const dot = document.getElementById('dot' + i);
-    if (i < capturedPhotos.length) { dot.classList.add('filled'); }
-    else { dot.classList.remove('filled'); }
-  }
 }
-
 function checkReady() {
-  const btn = document.getElementById('submitBtn');
-  const hint = document.getElementById('submitHint');
-  if (capturedPhotos.length === MAX_PHOTOS) {
-    btn.style.display = 'block'; hint.style.display = 'none';
-  } else {
-    btn.style.display = 'none'; hint.style.display = 'block';
-  }
+  const ready = capturedPhotos.length >= MAX_PHOTOS;
+  document.getElementById('submitBtn').style.display = ready ? 'block' : 'none';
+  document.getElementById('submitHint').style.display = ready ? 'none' : (capturedPhotos.length > 0 ? 'block' : 'none');
 }
 
 function submitPhotos() {
-  if (capturedPhotos.length !== MAX_PHOTOS) return;
-  completedFriends[currentFriendId] = [...capturedPhotos];
+  if (capturedPhotos.length < MAX_PHOTOS) return;
   stopCamera();
-  
   const f = FRIENDS[currentFriendId];
+  completedFriends[f.id] = [...capturedPhotos];
   document.getElementById('resultEmoji').textContent = f.resultEmoji;
   document.getElementById('resultTitle').textContent = f.resultTitle;
-  document.getElementById('resultMessage').innerHTML = f.resultMsg;
-  
-  const pZone = document.getElementById('resultPhotos');
-  pZone.innerHTML = capturedPhotos.map(p => `<img src="${p}">`).join('');
-  
+  document.getElementById('resultSub').textContent = f.need + ' 친구를 도와줬어요!';
+  document.getElementById('resultPhotos').innerHTML = capturedPhotos.map(s=>`<img src="${s}">`).join('');
+  document.getElementById('resultMessage').textContent = f.resultMsg;
   const doneCount = Object.keys(completedFriends).length;
-  const btnMore = document.getElementById('btnMoreFriends');
-  if (doneCount === 4) {
-    btnMore.textContent = "모든 친구 완료! 결과 보기 🎁";
-    btnMore.onclick = function() { showCompleteScreen(); };
+  const moreBtn = document.getElementById('btnMoreFriends');
+  if (doneCount >= 4) {
+    moreBtn.textContent = '🎉 모두 도왔어요! 완료하기';
+    moreBtn.onclick = () => showComplete();
   } else {
-    btnMore.textContent = "다른 친구 돕기 💪";
-    btnMore.onclick = function() { renderFriends(); showScreen('selectScreen'); };
+    moreBtn.textContent = `다른 친구 돕기 💪 (${4-doneCount}명 남음)`;
+    moreBtn.onclick = () => showScreen('selectScreen');
   }
   showScreen('resultScreen');
 }
 
-function showCompleteScreen() {
-  showScreen('completeScreen');
-  document.getElementById('ensembleBubbleText').textContent = `${studentNameText} 친구들이 소중한 물건을 가득 나눠주어 우리 모두 행복해졌어요! 최고예요!`;
-  
+async function showComplete() {
   const grid = document.getElementById('galleryGrid');
   grid.innerHTML = FRIENDS.map(f => {
     const photos = completedFriends[f.id] || [];
-    const pImgs = photos.map(p => `<img src="${p}">`).join('');
     return `<div class="gallery-item">
-      <div class="gallery-item-photos">${pImgs}</div>
-      <div class="gallery-caption">${f.name} 완수</div>
+      <div class="gallery-item-photos">${photos.map(s=>`<img src="${s}">`).join('')}</div>
+      <div class="gallery-caption">${f.emoji} ${f.name}</div>
     </div>`;
   }).join('');
-  
-  sendDataToGoogle();
+  document.getElementById('ensembleBubbleText').innerHTML = `🤝 "우와! <strong>${studentNameText}</strong> 친구들!<br>나눠줘서 진짜 고마워! ❤️"`;
+  showScreen('completeScreen');
+  await sendToGoogle();
 }
 
-function sendDataToGoogle() {
-  const overlay = document.getElementById('sendOverlay');
-  overlay.classList.remove('hidden');
-  
-  const payload = {
-    studentName: studentNameText,
-    timestamp: new Date().toISOString(),
-    friend0: (completedFriends[0] || []).join('||'),
-    friend1: (completedFriends[1] || []).join('||'),
-    friend2: (completedFriends[2] || []).join('||'),
-    friend3: (completedFriends[3] || []).join('||')
-  };
-  
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .then(() => {
-    overlay.classList.add('hidden');
-    showSendResult(true);
-  })
-  .catch(err => {
-    console.error(err);
-    overlay.classList.add('hidden');
-    showSendResult(false);
-  });
-}
-
-function showSendResult(success) {
-  const box = document.getElementById('sendResultBox');
-  box.style.display = 'block';
-  if (success) {
-    document.getElementById('sendResultIcon').textContent = '🎉';
-    document.getElementById('sendResultTitle').textContent = '선생님께 전송 완료!';
-    document.getElementById('sendResultSub').textContent = '우리 반 나눔 기록이 시트에 예쁘게 담겼어요.';
-  } else {
-    document.getElementById('sendResultIcon').textContent = '😥';
-    document.getElementById('sendResultTitle').textContent = '전송에 실패했어요';
-    document.getElementById('sendResultSub').textContent = '인터넷 연결을 확인하고 다시 시도해보세요.';
+async function sendToGoogle() {
+  document.getElementById('sendOverlay').classList.remove('hidden');
+  try {
+    const payload = {
+      studentName: studentNameText,
+      timestamp: new Date().toLocaleString('ko-KR'),
+      friends: FRIENDS.map(f => ({ name: f.name, photos: completedFriends[f.id] || [] }))
+    };
+    const res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    document.getElementById('sendOverlay').classList.add('hidden');
+    if (res.ok) { 
+      showSendResult(true, '전송 완료! 📬', `선생님께 ${studentNameText}의\n나눔 사진이 성공적으로 전달됐어요!`); 
+    } else { 
+      showSendResult(false, '전송 실패 😢', '다시 시도하거나 선생님께 알려주세요.'); 
+    }
+  } catch(e) {
+    document.getElementById('sendOverlay').classList.add('hidden');
+    showSendResult(false, '연결 오류 😢', '인터넷 연결을 확인하고 다시 시도해주세요.');
   }
 }
 
+function showSendResult(ok, title, sub) {
+  document.getElementById('sendResultBox').style.display = 'block';
+  document.getElementById('sendResultIcon').textContent = ok ? '✅' : '❌';
+  document.getElementById('sendResultTitle').textContent = title;
+  document.getElementById('sendResultSub').textContent = sub;
+  document.getElementById('sendResultBox').scrollIntoView({ behavior: 'smooth' });
+}
+
 function restartAll() {
-  selectedStudents = [];
-  completedFriends = {};
-  currentFriendId = null;
-  capturedPhotos = [];
-  document.getElementById('sendResultBox').style.display = 'none';
-  updateSelectionUI();
+  completedFriends = {}; capturedPhotos = []; selectedStudents = []; studentNameText = '';
+  updateSelectionUI(); document.getElementById('sendResultBox').style.display = 'none';
   showScreen('titleScreen');
 }
-</script>
 
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+  if (id === 'nameScreen') updateSelectionUI();
+  if (id === 'selectScreen') renderFriends();
+}
+
+renderStudentGrid();
+</script>
 </body>
 </html>
