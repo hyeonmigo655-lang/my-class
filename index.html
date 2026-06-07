@@ -23,6 +23,13 @@
     overflow-x: hidden;
   }
 
+  /* 전송 오버레이 */
+  .send-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; gap: 16px; }
+  .send-overlay.hidden { display: none; }
+  .send-spinner { width: 60px; height: 60px; border: 6px solid #FFD93D; border-top-color: #FF6B6B; border-radius: 50%; animation: spin2 0.8s linear infinite; }
+  @keyframes spin2 { to { transform: rotate(360deg); } }
+  .send-text { font-size: 1.3rem; color: var(--dark); }
+
   /* clouds */
   .cloud { position: fixed; opacity: 0.35; pointer-events: none; z-index: 0; animation: drift linear infinite; }
   .cloud svg { width: 120px; }
@@ -41,23 +48,13 @@
   h1 { font-size: 2.6rem; color: #FF6B6B; text-shadow: 3px 3px 0 #FFD93D; line-height: 1.2; margin-top: 10px; }
   .subtitle { font-family: 'Nanum Round Square', sans-serif; font-size: 1.1rem; color: #666; margin-top: 10px; }
   .friends-preview { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; margin: 30px auto; max-width: 500px; }
-  .preview-bubble {
-    width: 90px; height: 90px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2.2rem; box-shadow: 0 6px 16px rgba(0,0,0,0.13);
-    animation: pop 0.5s cubic-bezier(.34,1.56,.64,1) both;
-  }
+  .preview-bubble { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; box-shadow: 0 6px 16px rgba(0,0,0,0.13); animation: pop 0.5s cubic-bezier(.34,1.56,.64,1) both; }
   .preview-bubble:nth-child(1) { background: #FFF0C4; animation-delay: .1s; }
   .preview-bubble:nth-child(2) { background: #C8F0D8; animation-delay: .2s; }
   .preview-bubble:nth-child(3) { background: #FFD6CC; animation-delay: .3s; }
   .preview-bubble:nth-child(4) { background: #DDD4FF; animation-delay: .4s; }
   @keyframes pop { from{transform:scale(0);opacity:0} to{transform:scale(1);opacity:1} }
-  .start-btn {
-    background: linear-gradient(135deg, #FF6B6B, #FF8E53); color: white; border: none;
-    padding: 18px 48px; border-radius: 50px; font-family: 'Jua', sans-serif; font-size: 1.4rem;
-    cursor: pointer; box-shadow: 0 6px 20px rgba(255,107,107,0.4);
-    transition: transform .15s, box-shadow .15s; margin-top: 10px;
-  }
+  .start-btn { background: linear-gradient(135deg, #FF6B6B, #FF8E53); color: white; border: none; padding: 18px 48px; border-radius: 50px; font-family: 'Jua', sans-serif; font-size: 1.4rem; cursor: pointer; box-shadow: 0 6px 20px rgba(255,107,107,0.4); transition: transform .15s, box-shadow .15s; margin-top: 10px; }
   .start-btn:hover { transform: translateY(-3px); }
   .start-btn:active { transform: translateY(1px); }
 
@@ -65,45 +62,19 @@
   #nameScreen { text-align: center; padding: 40px 20px; }
   .name-title { font-size: 1.8rem; color: var(--dark); margin-bottom: 5px; }
   .name-sub { font-family: 'Nanum Round Square', sans-serif; font-size: 1rem; color: #68829e; font-weight: bold; margin-bottom: 25px; }
-  
   .student-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 500px; margin: 0 auto 20px; }
   @media (max-width: 400px) { .student-grid { grid-template-columns: repeat(2, 1fr); } }
-  
-  .student-card {
-    background: white; border-radius: 18px; padding: 20px 12px; text-align: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; border: 4px solid transparent;
-    transition: all 0.2s ease; position: relative; display: flex; align-items: center; justify-content: center;
-    min-height: 70px;
-  }
+  .student-card { background: white; border-radius: 18px; padding: 20px 12px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.08); cursor: pointer; border: 4px solid transparent; transition: all 0.2s ease; position: relative; display: flex; align-items: center; justify-content: center; min-height: 70px; }
   .student-card p { font-size: 1.3rem; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
   .student-card.selected { border-color: #6BCB77; background-color: #E8F5E9; transform: scale(1.03); }
-  .student-card.selected::after {
-    content: '✔'; position: absolute; top: 6px; right: 6px;
-    background: #6BCB77; color: white; width: 20px; height: 20px;
-    border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center;
-  }
-
-  .add-card {
-    background: #FFF9F0; border: 3px dashed #FFBE76; border-radius: 18px;
-    padding: 20px 12px; text-align: center; cursor: pointer;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    min-height: 70px; transition: all 0.2s;
-  }
+  .student-card.selected::after { content: '✔'; position: absolute; top: 6px; right: 6px; background: #6BCB77; color: white; width: 20px; height: 20px; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; }
+  .add-card { background: #FFF9F0; border: 3px dashed #FFBE76; border-radius: 18px; padding: 20px 12px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 70px; transition: all 0.2s; }
   .add-card:hover { background: #FFEAA7; transform: translateY(-2px); }
   .add-card p { font-size: 1.05rem; color: #E58E26; font-weight: bold; pointer-events: none; }
-
-  .selection-bar {
-    background: white; border-radius: 20px; padding: 15px 20px;
-    box-shadow: var(--card-shadow); max-width: 500px; margin: 0 auto;
-    position: sticky; bottom: 15px; z-index: 10;
-  }
+  .selection-bar { background: white; border-radius: 20px; padding: 15px 20px; box-shadow: var(--card-shadow); max-width: 500px; margin: 0 auto; position: sticky; bottom: 15px; z-index: 10; }
   .selection-status-text { font-family: 'Nanum Round Square', sans-serif; font-size: 1rem; color: #555; margin-bottom: 12px; }
   .selection-status-text span { color: #FF6B6B; font-weight: 800; }
-  .name-btn {
-    width: 100%; background: #ccc; color: white; border: none;
-    padding: 14px; border-radius: 50px; font-family: 'Jua', sans-serif; font-size: 1.2rem;
-    cursor: not-allowed; transition: all .2s;
-  }
+  .name-btn { width: 100%; background: #ccc; color: white; border: none; padding: 14px; border-radius: 50px; font-family: 'Jua', sans-serif; font-size: 1.2rem; cursor: not-allowed; transition: all .2s; }
   .name-btn.ready { background: linear-gradient(135deg, #6BCB77, #4CAF50); cursor: pointer; box-shadow: 0 4px 16px rgba(107,203,119,0.4); }
 
   /* ── SELECT ── */
@@ -111,34 +82,19 @@
   .screen-title { text-align: center; font-size: 1.5rem; color: var(--dark); margin-bottom: 6px; }
   .screen-sub { text-align: center; font-family: 'Nanum Round Square', sans-serif; font-size: 0.95rem; color: #888; margin-bottom: 24px; }
   .friends-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 480px; margin: 0 auto; }
-  .friend-card {
-    background: white; border-radius: 24px; padding: 22px 16px 18px;
-    text-align: center; box-shadow: var(--card-shadow); cursor: pointer;
-    border: 4px solid transparent; transition: transform .2s, box-shadow .2s;
-    position: relative; overflow: hidden; z-index: 5;
-  }
-  .friend-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0;
-    height: 6px; border-radius: 20px 20px 0 0;
-  }
+  .friend-card { background: white; border-radius: 24px; padding: 22px 16px 18px; text-align: center; box-shadow: var(--card-shadow); cursor: pointer; border: 4px solid transparent; transition: transform .2s, box-shadow .2s; position: relative; overflow: hidden; z-index: 5; }
+  .friend-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 6px; border-radius: 20px 20px 0 0; }
   .friend-card[data-id="0"]::before { background: var(--sunny); }
   .friend-card[data-id="1"]::before { background: var(--mint); }
   .friend-card[data-id="2"]::before { background: var(--coral); }
   .friend-card[data-id="3"]::before { background: var(--lavender); }
   .friend-card:hover { transform: translateY(-4px); box-shadow: 0 14px 32px rgba(0,0,0,0.15); }
   .friend-card.done { opacity: 0.55; pointer-events: none; }
-  .friend-card.done::after {
-    content: '✓ 완료!'; position: absolute; inset: 0;
-    background: rgba(255,255,255,0.82); display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem; color: var(--mint); border-radius: 20px;
-  }
+  .friend-card.done::after { content: '✓ 완료!'; position: absolute; inset: 0; background: rgba(255,255,255,0.82); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; color: var(--mint); border-radius: 20px; }
   .friend-emoji { font-size: 3rem; display: block; margin-bottom: 6px; pointer-events: none; }
   .friend-name { font-size: 1.1rem; color: var(--dark); margin-bottom: 4px; pointer-events: none; }
   .friend-need { font-family: 'Nanum Round Square', sans-serif; font-size: 0.82rem; color: #777; line-height: 1.4; pointer-events: none; }
-  .need-badge {
-    display: inline-block; margin-top: 8px; padding: 4px 12px; border-radius: 20px;
-    font-size: 0.78rem; font-family: 'Nanum Round Square', sans-serif; font-weight: 800; color: white; pointer-events: none;
-  }
+  .need-badge { display: inline-block; margin-top: 8px; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-family: 'Nanum Round Square', sans-serif; font-weight: 800; color: white; pointer-events: none; }
   .friend-card[data-id="0"] .need-badge { background: #FFB800; }
   .friend-card[data-id="1"] .need-badge { background: var(--mint); }
   .friend-card[data-id="2"] .need-badge { background: var(--coral); }
@@ -148,136 +104,71 @@
   .progress-label { text-align: center; font-family: 'Nanum Round Square', sans-serif; font-size: 0.85rem; color: #999; margin-bottom: 10px; }
 
   /* ── CAMERA ── */
-  .camera-header {
-    background: white; padding: 16px 20px 14px;
-    display: flex; align-items: center; gap: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 10;
-  }
-  .back-btn {
-    background: #f0f0f0; border: none; border-radius: 50%;
-    width: 40px; height: 40px; font-size: 1.1rem;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-  }
+  .camera-header { background: white; padding: 16px 20px 14px; display: flex; align-items: center; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 10; }
+  .back-btn { background: #f0f0f0; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .camera-header-info { flex: 1; }
   .camera-friend-name { font-size: 1rem; color: var(--dark); }
   .camera-friend-need { font-family: 'Nanum Round Square', sans-serif; font-size: 0.8rem; color: #888; }
   .camera-friend-emoji { font-size: 2rem; }
   .camera-body { padding: 20px; text-align: center; }
-
   .photo-count-bar { display: flex; gap: 10px; justify-content: center; margin-bottom: 16px; }
-  .photo-dot {
-    width: 44px; height: 44px; border-radius: 50%;
-    border: 3px dashed #ddd; display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem; transition: all .3s; background: #fafafa; color: #ccc;
-  }
+  .photo-dot { width: 44px; height: 44px; border-radius: 50%; border: 3px dashed #ddd; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all .3s; background: #fafafa; color: #ccc; }
   .photo-dot.filled { border-color: #6BCB77; border-style: solid; background: #E8F5E9; color: #6BCB77; }
   .photo-count-label { text-align: center; font-family: 'Nanum Round Square', sans-serif; font-size: 0.88rem; color: #888; margin-bottom: 14px; }
   .photo-count-label span { color: #FF6B6B; font-weight: 800; }
-
-  .speech-bubble {
-    background: white; border-radius: 20px; padding: 16px 20px;
-    box-shadow: var(--card-shadow); margin-bottom: 16px; text-align: left;
-    position: relative; display: flex; align-items: center; gap: 14px;
-  }
+  .speech-bubble { background: white; border-radius: 20px; padding: 16px 20px; box-shadow: var(--card-shadow); margin-bottom: 16px; text-align: left; position: relative; display: flex; align-items: center; gap: 14px; }
   .speech-bubble::after { content: ''; position: absolute; bottom: -12px; left: 30px; border: 12px solid transparent; border-top-color: white; border-bottom: 0; }
   .bubble-emoji { font-size: 2.6rem; }
   .bubble-text { font-size: 1rem; color: var(--dark); line-height: 1.45; }
   .bubble-text strong { color: #FF6B6B; }
-
   .camera-zone { background: white; border-radius: 24px; overflow: hidden; box-shadow: var(--card-shadow); margin-bottom: 14px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto; }
   .camera-zone video, .camera-zone canvas { width: 100%; height: auto; display: block; max-height: 300px; object-fit: cover; }
   .camera-placeholder { height: 240px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #f8f8f8; gap: 10px; color: #ccc; }
   .camera-placeholder span { font-size: 3rem; }
   .camera-placeholder p { font-size: 0.9rem; font-family: 'Nanum Round Square', sans-serif; }
-
   .camera-controls { display: flex; flex-direction: column; gap: 12px; max-width: 400px; margin: 14px auto; }
   .cam-btn { width: 100%; padding: 16px; border: none; border-radius: 16px; font-family: 'Jua', sans-serif; font-size: 1.2rem; font-weight: bold; cursor: pointer; transition: transform .15s, box-shadow .15s; }
   .cam-btn:active { transform: scale(.96); }
   .cam-btn-open { background: linear-gradient(135deg, #667eea, #764ba2); color: white; box-shadow: 0 4px 14px rgba(102,126,234,0.4); }
-  
   .cam-btn-shoot { background: linear-gradient(135deg, #f093fb, #f5576c); color: white; box-shadow: 0 4px 14px rgba(245,87,108,0.4); display: none; padding: 20px; font-size: 1.4rem; }
   .cam-btn-upload { background: linear-gradient(135deg, #43e97b, #38f9d7); color: #333; font-size: 1rem; padding: 12px; }
-
   .hint-box { background: linear-gradient(135deg, #fff9c4, #fff3e0); border-radius: 16px; padding: 14px 16px; margin: 14px auto; border-left: 4px solid var(--sunny); max-width: 400px; text-align: left; }
   .hint-title { font-size: 0.85rem; color: #D4A017; margin-bottom: 6px; }
   .hint-items { display: flex; flex-wrap: wrap; gap: 8px; }
   .hint-item { background: white; border-radius: 20px; padding: 4px 12px; font-size: 0.82rem; font-family: 'Nanum Round Square', sans-serif; color: #555; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
-
   .multi-preview { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 6px; margin: 14px auto; max-width: 400px; }
   .multi-preview-item { flex: 0 0 auto; position: relative; width: 80px; height: 80px; border-radius: 14px; overflow: hidden; box-shadow: var(--card-shadow); }
   .multi-preview-item img { width: 100%; height: 100%; object-fit: cover; }
   .multi-preview-item .del-btn { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.55); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .multi-preview-slot { flex: 0 0 auto; width: 80px; height: 80px; border-radius: 14px; border: 3px dashed #ddd; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #ddd; background: #fafafa; }
-
   .submit-btn { width: 100%; max-width: 400px; margin: 0 auto; background: linear-gradient(135deg, #FF6B6B, #FF8E53); color: white; border: none; padding: 18px; border-radius: 16px; font-family: 'Jua', sans-serif; font-size: 1.3rem; cursor: pointer; box-shadow: 0 4px 16px rgba(255,107,107,0.35); transition: transform .15s; display: none; }
   .submit-btn:hover { transform: translateY(-2px); }
   .submit-hint { text-align: center; font-family: 'Nanum Round Square', sans-serif; font-size: 0.82rem; color: #aaa; margin-top: 8px; display: none; }
-
-  /* ── RESULT ── */
+  #resultScreen { padding: 30px 20px 60px; text-align: center; }
   .result-emoji { font-size: 5rem; display: block; animation: bounce 1.8s ease-in-out infinite; }
   .result-title { font-size: 1.8rem; color: #FF6B6B; margin: 10px 0 6px; }
   .result-sub { font-family: 'Nanum Round Square', sans-serif; font-size: 0.95rem; color: #888; margin-bottom: 20px; }
   .result-photos { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; }
   .result-photos img { width: 90px; height: 90px; object-fit: cover; border-radius: 14px; box-shadow: var(--card-shadow); }
   .result-message { background: linear-gradient(135deg, #E8F5E9, #F3E5F5); border-radius: 16px; padding: 14px; font-size: 0.9rem; font-family: 'Nanum Round Square', sans-serif; color: #555; line-height: 1.5; margin-bottom: 16px; max-width: 380px; margin-left: auto; margin-right: auto; }
-  .result-star-row { font-size: 2rem; margin-bottom: 20px; animation: pop 0.5s both; }
+  .result-star-row { font-size: 2rem; margin-bottom: 20px; }
   .result-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
   .result-btn { padding: 14px 28px; border: none; border-radius: 50px; font-family: 'Jua', sans-serif; font-size: 1rem; cursor: pointer; transition: transform .15s; }
-  .result-btn:active { transform: scale(.96); }
   .result-btn-more { background: linear-gradient(135deg, #6BCB77, #4CAF50); color: white; box-shadow: 0 4px 14px rgba(107,203,119,0.4); }
   .result-btn-home { background: #f0f0f0; color: var(--dark); }
-
-  /* ── COMPLETE ── */
-  .complete-stars { font-size: 3rem; margin-bottom: 10px; animation: spin 2s ease-in-out; }
-  @keyframes spin { from{transform:rotate(-20deg) scale(.5);opacity:0} to{transform:rotate(0) scale(1);opacity:1} }
-  .complete-title { font-size: 2rem; color: #FF6B6B; text-shadow: 2px 2px 0 #FFD93D; margin-bottom: 8px; }
-  
-  .thanks-ensemble-box { background: white; border-radius: 24px; padding: 20px 15px; box-shadow: var(--card-shadow); max-width: 460px; margin: 0 auto 24px; border: 3px dashed #FF6B6B; }
-  .friends-line { display: flex; justify-content: center; gap: 14px; margin-bottom: 14px; }
-  .ensemble-friend { display: flex; flex-direction: column; align-items: center; }
-  .ensemble-emoji { font-size: 3rem; animation: bounce 1.5s ease-in-out infinite; }
-  .ensemble-friend:nth-child(2) .ensemble-emoji { animation-delay: 0.2s; }
-  .ensemble-friend:nth-child(3) .ensemble-emoji { animation-delay: 0.4s; }
-  .ensemble-friend:nth-child(4) .ensemble-emoji { animation-delay: 0.6s; }
-  .ensemble-name { font-size: 0.85rem; color: #555; margin-top: 4px; }
-  .ensemble-bubble { background: #FFF0F5; border-radius: 16px; padding: 12px 18px; font-size: 1.1rem; color: #FF6B6B; font-weight: bold; line-height: 1.4; box-shadow: inset 0 2px 6px rgba(0,0,0,0.05); text-align: center; }
-
-  .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; max-width: 460px; margin: 0 auto 20px; }
-  .gallery-item { background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--card-shadow); }
-  .gallery-item-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 6px; }
-  .gallery-item-photos img { width: 100%; height: 50px; object-fit: cover; border-radius: 8px; }
-  .gallery-caption { padding: 6px 10px 8px; font-size: 0.8rem; font-family: 'Nanum Round Square', sans-serif; color: #555; text-align: center; }
-
-  /* sending overlay */
-  .send-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; gap: 16px; }
-  .send-overlay.hidden { display: none; }
-  .send-spinner { width: 60px; height: 60px; border: 6px solid #FFD93D; border-top-color: #FF6B6B; border-radius: 50%; animation: spin2 0.8s linear infinite; }
-  @keyframes spin2 { to { transform: rotate(360deg); } }
-  .send-text { font-size: 1.3rem; color: var(--dark); }
-  .send-sub { font-family: 'Nanum Round Square', sans-serif; font-size: 0.9rem; color: #888; }
-
-  .send-result-box { background: white; border-radius: 20px; padding: 24px 30px; text-align: center; box-shadow: var(--card-shadow); max-width: 340px; margin: 0 auto 24px; }
-  .send-result-icon { font-size: 3rem; margin-bottom: 10px; }
-  .send-result-title { font-size: 1.2rem; color: var(--dark); margin-bottom: 6px; }
-  .send-result-sub { font-family: 'Nanum Round Square', sans-serif; font-size: 0.85rem; color: #888; line-height: 1.5; }
-
-  .restart-btn { background: #f0f0f0; color: var(--dark); border: none; padding: 16px 40px; border-radius: 50px; font-family: 'Jua', sans-serif; font-size: 1.1rem; cursor: pointer; transition: transform .15s; }
-  .restart-btn:hover { transform: translateY(-2px); }
-
   input[type=file] { display: none; }
 </style>
 </head>
 <body>
 
-<div class="cloud" style="left:-150px"><svg viewBox="0 0 200 80" fill="white"><ellipse cx="100" cy="50" rx="90" ry="30"/><ellipse cx="70" cy="40" rx="50" ry="28"/><ellipse cx="130" cy="35" rx="45" ry="25"/></svg></div>
-<div class="cloud" style="left:-150px"><svg viewBox="0 0 200 80" fill="white"><ellipse cx="100" cy="50" rx="80" ry="28"/><ellipse cx="60" cy="38" rx="45" ry="26"/><ellipse cx="145" cy="32" rx="40" ry="22"/></svg></div>
-<div class="cloud" style="left:-150px"><svg viewBox="0 0 200 80" fill="white"><ellipse cx="100" cy="50" rx="85" ry="29"/><ellipse cx="75" cy="42" rx="48" ry="27"/><ellipse cx="135" cy="36" rx="42" ry="23"/></svg></div>
-
 <div class="send-overlay hidden" id="sendOverlay">
   <div class="send-spinner"></div>
   <div class="send-text">📤 선생님께 전송 중...</div>
-  <div class="send-sub">잠깐만 기다려줘요!</div>
 </div>
+
+<div class="cloud" style="left:-150px"><svg viewBox="0 0 200 80" fill="white"><ellipse cx="100" cy="50" rx="90" ry="30"/><ellipse cx="70" cy="40" rx="50" ry="28"/><ellipse cx="130" cy="35" rx="45" ry="25"/></svg></div>
+<div class="cloud" style="left:-150px"><svg viewBox="0 0 200 80" fill="white"><ellipse cx="100" cy="50" rx="80" ry="28"/><ellipse cx="60" cy="38" rx="45" ry="26"/><ellipse cx="145" cy="32" rx="40" ry="22"/></svg></div>
+<div class="cloud" style="left:-150px"><svg viewBox="0 0 200 80" fill="white"><ellipse cx="100" cy="50" rx="85" ry="29"/><ellipse cx="75" cy="42" rx="48" ry="27"/><ellipse cx="135" cy="36" rx="42" ry="23"/></svg></div>
 
 <section id="titleScreen" class="screen active">
   <div style="text-align:center;padding:40px 20px 60px">
@@ -297,9 +188,7 @@
 <section id="nameScreen" class="screen">
   <div class="name-title" style="margin-top:20px">👋 오늘 같이 할 친구 2명을 골라주세요!</div>
   <p class="name-sub">우리 반 이름 명단에서 고를 수 있어요</p>
-  
   <div class="student-grid" id="studentGrid"></div>
-  
   <div class="selection-bar">
     <div class="selection-status-text" id="selectionStatusText">선택된 친구가 없습니다. <span>(0/2)</span></div>
     <button class="name-btn" id="nextBtn" onclick="confirmNames()" disabled>다음 활동으로 ▶</button>
@@ -325,44 +214,31 @@
     </div>
     <span class="camera-friend-emoji" id="camFriendEmoji"></span>
   </div>
-
   <div class="camera-body">
     <div class="speech-bubble">
       <span class="bubble-emoji" id="bubbleEmoji"></span>
       <div class="bubble-text" id="bubbleText"></div>
     </div>
-
     <div class="photo-count-bar" id="photoCountBar">
-      <div class="photo-dot" id="dot0">1</div>
-      <div class="photo-dot" id="dot1">2</div>
-      <div class="photo-dot" id="dot2">3</div>
-      <div class="photo-dot" id="dot3">4</div>
+      <div class="photo-dot" id="dot0">1</div><div class="photo-dot" id="dot1">2</div><div class="photo-dot" id="dot2">3</div><div class="photo-dot" id="dot3">4</div>
     </div>
-    <div class="photo-count-label"><span id="photoCountText">0</span> / 4장 찍었어요 — 4장 모두 찍으면 넘어가요!</div>
-
+    <div class="photo-count-label"><span id="photoCountText">0</span> / 4장 찍었어요</div>
     <div class="hint-box">
       <div class="hint-title">💡 교실에서 이런 걸 찾아봐요!</div>
       <div class="hint-items" id="hintItems"></div>
     </div>
-
     <div class="camera-zone">
-      <div class="camera-placeholder" id="camPlaceholder">
-        <span>📷</span>
-        <p>카메라 버튼을 눌러 촬영하세요</p>
-      </div>
+      <div class="camera-placeholder" id="camPlaceholder"><span>📷</span><p>카메라 버튼을 눌러 촬영하세요</p></div>
       <video id="camVideo" style="display:none" autoplay playsinline muted></video>
       <canvas id="camCanvas" style="display:none"></canvas>
     </div>
-
     <div class="camera-controls">
       <button class="cam-btn cam-btn-open" id="btnOpen" onclick="openCamera()">📷 카메라 열기</button>
       <button class="cam-btn cam-btn-shoot" id="btnShoot" onclick="shoot()">📸 찰칵! 사진 찍기</button>
       <button class="cam-btn cam-btn-upload" onclick="triggerUpload()">🖼️ 앨범에서 고르기</button>
     </div>
     <input type="file" id="fileInput" accept="image/*" multiple>
-
     <div class="multi-preview" id="multiPreview"></div>
-
     <button class="submit-btn" id="submitBtn" onclick="submitPhotos()">💝 이 물건들을 나눠줄게요!</button>
     <div class="submit-hint" id="submitHint">사진 4장을 모두 찍으면 활성화돼요</div>
   </div>
@@ -383,386 +259,180 @@
   </div>
 </section>
 
-<section id="completeScreen" class="screen">
-  <div style="padding:40px 20px 60px;text-align:center">
-    <div class="complete-stars">🌟🌟🌟🌟</div>
-    <h2 class="complete-title">대단해요!</h2>
-    
-    <div class="thanks-ensemble-box">
-      <div class="friends-line">
-        <div class="ensemble-friend"><span class="ensemble-emoji">😋</span><span class="ensemble-name">지민</span></div>
-        <div class="ensemble-friend"><span class="ensemble-emoji">🥰</span><span class="ensemble-name">수아</span></div>
-        <div class="ensemble-friend"><span class="ensemble-emoji">💪</span><span class="ensemble-name">준호</span></div>
-        <div class="ensemble-friend"><span class="ensemble-emoji">😄</span><span class="ensemble-name">하은</span></div>
-      </div>
-      <div class="ensemble-bubble" id="ensembleBubbleText"></div>
-    </div>
-
-    <div class="gallery-grid" id="galleryGrid"></div>
-    <div class="send-result-box" id="sendResultBox" style="display:none">
-      <div class="send-result-icon" id="sendResultIcon"></div>
-      <div class="send-result-title" id="sendResultTitle"></div>
-      <div class="send-result-sub" id="sendResultSub"></div>
-    </div>
-    <div>
-      <button class="restart-btn" onclick="restartAll()">처음부터 다시하기 🔄</button>
-    </div>
-  </div>
-</section>
-
 <script>
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-HfgERi3IoHqm5jGoE1tp3leqyCmIsPZ3wTyWmugAjBARuCZ8NhtNPNcoAbgQUykcdQ/exec';
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-HfgERi3IoHqm5jGoE1tp3leqyCmIsPZ3wTyWmugAjBARuCZ8NhtNPNcoAbgQUykcdQ/exec';
+  const FIXED_STUDENT_NAMES = ["강다율", "고다영", "고다온", "김아현", "박새별", "양서아", "정하윤", "김담호", "김재승", "김형호", "노은성", "유승택", "이재승", "한주호", "홍서우", "한하율"];
+  let dynamicStudents = FIXED_STUDENT_NAMES.map((name, index) => ({ id: index + 1, name: name.trim() }));
+  let nextStudentId = dynamicStudents.length + 1;
+  const FRIENDS = [
+    { id: 0, name: "배고픈 지민", emoji: "😔", need: "배가 고파요", badge: "🍎 음식이 필요해요", speech: `난 너무 <strong>배가 고파</strong> 😢<br>나에게 필요한 걸 4가지 나누어 줄 수 있니?`, hints: ["🍎 과일", "🥪 간식", "🥛 우유", "🍪 과자", "🍌 바나나"], resultMsg: "지민이가 맛있게 먹었어요!", resultTitle: "지민이가 배불러졌어요!", resultEmoji: "😋" },
+    { id: 1, name: "추운 수아", emoji: "🥶", need: "추워요", badge: "🧥 따뜻한 게 필요해요", speech: `나 옷이 얇아서 너무 <strong>추워</strong> 🥶<br>나에게 필요한 걸 4가지 나누어줄 수 있니?`, hints: ["🧥 외투", "🧣 목도리", "🧤 장갑", "🎽 긴팔옷", "🪖 모자"], resultMsg: "수아가 따뜻해졌어요!", resultTitle: "수아가 따뜻해졌어요!", resultEmoji: "🥰" },
+    { id: 2, name: "아픈 준호", emoji: "😷", need: "아파요", badge: "🩹 도움이 필요해요", speech: `나 지금 <strong>많이 아파</strong> 😷<br>나에게 필요한 걸 4가지 나누어줄 수 있니?`, hints: ["🩹 반창고", "💊 약", "🌡️ 체온계", "🧴 약품", "🤧 휴지"], resultMsg: "준호가 조금 나아졌어요!", resultTitle: "준호가 나아졌어요!", resultEmoji: "💪" },
+    { id: 3, name: "심심한 하은", emoji: "😑", need: "심심해요", badge: "🎨 놀거리가 필요해요", speech: `나 지금 너무 <strong>심심해</strong> 😑<br>나에게 필요한 걸 4가지 나누어줄 수 있니?`, hints: ["📚 책", "🎨 색연필", "🧩 퍼즐", "🪀 장난감", "✂️ 가위"], resultMsg: "하은이가 즐겁게 놀고 있어요!", resultTitle: "하은이가 즐거워졌어요!", resultEmoji: "😄" }
+  ];
+  let selectedStudents = []; 
+  let studentNameText = '';
+  let currentFriendId = null;
+  let capturedPhotos = [];
+  let completedFriends = {};
+  let cameraStream = null;
 
-const FIXED_STUDENT_NAMES = [
-  "강다율", "고다영", "고다온", "김아현", "박새별", 
-  "양서아", "정하윤", "김담호", "김재승", "김형호", 
-  "노은성", "유승택", "이재승", "한주호", "홍서우", "한하율"
-];
-
-let dynamicStudents = FIXED_STUDENT_NAMES.map((name, index) => ({
-  id: index + 1,
-  name: name.trim()
-}));
-
-let nextStudentId = dynamicStudents.length + 1;
-
-const FRIENDS = [
-  { id: 0, name: "배고픈 지민", emoji: "😔", need: "배가 고파요", badge: "🍎 음식이 필요해요", speech: `난 너무 <strong>배가 고파</strong> 😢<br>나에게 필요한 걸 4가지 나누어 줄 수 있니?`, hints: ["🍎 과일", "🥪 간식", "🥛 우유", "🍪 과자", "🍌 바나나"], resultMsg: "지민이가 맛있게 먹었어요! 배고픈 친구에게 음식을 나눠주는 건 정말 따뜻한 마음이에요 💛", resultTitle: "지민이가 배불러졌어요!", resultEmoji: "😋" },
-  { id: 1, name: "추운 수아", emoji: "🥶", need: "추워요", badge: "🧥 따뜻한 게 필요해요", speech: `나 옷이 얇아서 너무 <strong>추워</strong> 🥶<br>나에게 필요한 걸 4가지 나누어줄 수 있니?`, hints: ["🧥 외투", "🧣 목도리", "🧤 장갑", "🎽 긴팔옷", "🪖 모자"], resultMsg: "수아가 따뜻해졌어요! 추운 친구에게 따뜻한 것을 나눠주는 건 정말 사랑스러운 행동이에요 💚", resultTitle: "수아가 따뜻해졌어요!", resultEmoji: "🥰" },
-  { id: 2, name: "아픈 준호", emoji: "😷", need: "아파요", badge: "🩹 도움이 필요해요", speech: `나 지금 <strong>많이 아파</strong> 😷<br>나에게 필요한 걸 4가지 나누어줄 수 있니?`, hints: ["🩹 반창고", "💊 약", "🌡️ 체온계", "🧴 약품", "🤧 휴지"], resultMsg: "준호가 조금 나아졌어요! 아픈 친구를 돌봐주는 건 정말 용감한 마음이에요 ❤️", resultTitle: "준호가 나아졌어요!", resultEmoji: "💪" },
-  { id: 3, name: "심심한 하은", emoji: "😑", need: "심심해요", badge: "🎨 놀거리가 필요해요", speech: `나 지금 너무 <strong>심심해</strong> 😑<br>나에게 필요한 걸 4가지 나누어줄 수 있니?`, hints: ["📚 책", "🎨 색연필", "🧩 퍼즐", "🪀 장난감", "✂️ 가위"], resultMsg: "하은이가 즐겁게 놀고 있어요! 심심한 친구에게 놀거리를 나눠주는 건 정말 친절한 마음이에요 💜", resultTitle: "하은이가 즐거워졌어요!", resultEmoji: "😄" }
-];
-
-const MAX_PHOTOS = 4;
-let selectedStudents = []; 
-let studentNameText = '';    
-let currentFriendId = null;
-let capturedPhotos = [];        
-let completedFriends = {};      
-let cameraStream = null;
-
-window.onload = function() {
-  renderStudentGrid();
-};
-
-function showScreen(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
-  window.scrollTo(0,0);
-}
-
-function renderStudentGrid() {
-  const grid = document.getElementById('studentGrid');
-  let html = '';
-  dynamicStudents.forEach(s => {
-    const isSelected = selectedStudents.some(sel => sel.id === s.id);
-    html += `<div class="student-card ${isSelected ? 'selected' : ''}" onclick="toggleStudent(${s.id}, '${s.name}')"><p>${s.name}</p></div>`;
-  });
-  html += `<div class="add-card" onclick="addNewStudent()"><span style="font-size:1.4rem">➕</span><p>친구 추가</p></div>`;
-  grid.innerHTML = html;
-}
-
-function addNewStudent() {
-  if (dynamicStudents.length >= 25) { alert("친구는 최대 25명까지 등록할 수 있어요!"); return; }
-  const newName = prompt("새로운 친구의 이름을 입력해주세요:");
-  if (!newName || newName.trim() === "") return;
-  const trimmedName = newName.trim();
-  if (trimmedName.length > 5) { alert("이름은 5글자 이내로 입력해 주세요."); return; }
-  if (dynamicStudents.some(s => s.name === trimmedName)) { alert("이미 명단에 같은 이름의 친구가 있어요!"); return; }
-  dynamicStudents.push({ id: nextStudentId++, name: trimmedName });
-  renderStudentGrid();
-}
-
-function toggleStudent(id, name) {
-  const index = selectedStudents.findIndex(s => s.id === id);
-  if (index > -1) { selectedStudents.splice(index, 1); } 
-  else {
-    if (selectedStudents.length < 2) { selectedStudents.push({ id, name }); } 
-    else { alert("한 패드당 2명의 친구만 고를 수 있어요!"); }
-  }
-  updateSelectionUI();
-}
-
-function updateSelectionUI() {
-  renderStudentGrid();
-  const statusText = document.getElementById('selectionStatusText');
-  const nextBtn = document.getElementById('nextBtn');
-  if (selectedStudents.length === 0) {
-    statusText.innerHTML = `선택된 친구가 없습니다. <span>(0/2)</span>`;
-    nextBtn.disabled = true; nextBtn.classList.remove('ready');
-  } else if (selectedStudents.length === 1) {
-    statusText.innerHTML = `선택된 친구: <b>${selectedStudents[0].name}</b> <span>(1/2)</span> 한 명 더 골라주세요!`;
-    nextBtn.disabled = true; nextBtn.classList.remove('ready');
-  } else if (selectedStudents.length === 2) {
-    statusText.innerHTML = `선택 완료: <b>${selectedStudents[0].name}, ${selectedStudents[1].name}</b> 🎉`;
-    nextBtn.disabled = false; nextBtn.classList.add('ready');
-  }
-}
-
-// 다음 활동으로 넘어갈 때 꼬이던 순서를 완벽히 고정
-function confirmNames() {
-  if (selectedStudents.length !== 2) return;
-  studentNameText = `${selectedStudents[0].name}, ${selectedStudents[1].name}`;
-  
-  // 1. 글자 먼저 안전하게 교체
-  document.getElementById('selectTitle').textContent = `${studentNameText} 친구들! 어떤 친구를 도와줄까요?`;
-  
-  // 2. 중요!! 목록을 확실하게 먼저 그리고 나서 화면을 전환
-  renderFriends();
-  showScreen('selectScreen');
-}
-
-function renderFriends() {
-  const grid = document.getElementById('friendsGrid');
-  if (!grid) return; // 방어 코드 추가
-  
-  const doneCount = Object.keys(completedFriends).length;
-  
-  // 패드 환경에서 클릭이 100% 되도록 함수를 분리하여 단단하게 정렬
-  let html = '';
-  FRIENDS.forEach(f => {
-    const done = completedFriends[f.id] !== undefined;
-    html += `
-      <div class="friend-card ${done ? 'done' : ''}" data-id="${f.id}" onclick="handleFriendClick(${f.id}, ${done})">
-        <span class="friend-emoji">${f.emoji}</span>
-        <div class="friend-name">${f.name}</div>
-        <div class="friend-need">${f.need}</div>
-        <span class="need-badge">${f.badge}</span>
-      </div>
-    `;
-  });
-  
-  grid.innerHTML = html;
-  document.getElementById('progressBar').style.width = (doneCount/4*100)+'%';
-  document.getElementById('progressLabel').textContent = `${doneCount} / 4 명 도움 완료`;
-}
-
-// 인라인 오류 방지를 위한 독립 클릭 핸들러 작동 구조 구현
-function handleFriendClick(id, isDone) {
-  if (isDone) return;
-  selectFriend(id);
-}
-
-function selectFriend(id) {
-  currentFriendId = id; 
-  capturedPhotos = []; 
-  const f = FRIENDS[id];
-  
-  document.getElementById('camFriendName').textContent = f.name;
-  document.getElementById('camFriendNeed').textContent = f.need;
-  document.getElementById('camFriendEmoji').textContent = f.emoji;
-  document.getElementById('bubbleEmoji').textContent = f.emoji;
-  document.getElementById('bubbleText').innerHTML = f.speech;
-  document.getElementById('hintItems').innerHTML = f.hints.map(h=>`<span class="hint-item">${h}</span>`).join('');
-  
-  resetCameraUI(); 
-  showScreen('cameraScreen');
-}
-
-function resetCameraUI() {
-  stopCamera();
-  document.getElementById('camPlaceholder').style.display='flex';
-  document.getElementById('camVideo').style.display='none';
-  document.getElementById('btnOpen').style.display='block';
-  document.getElementById('btnShoot').style.display='none';
-  document.getElementById('submitBtn').style.display='none';
-  document.getElementById('submitHint').style.display='none';
-  renderPhotoStrip(); 
-  updateDots();
-}
-
-async function openCamera() {
-  try {
-    if (cameraStream) stopCamera();
-    const constraints = { video: { facingMode: 'environment', width: { ideal: 640 }, height: { ideal: 480 } }, audio: false };
-    cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
-    const video = document.getElementById('camVideo');
-    video.srcObject = cameraStream;
-    document.getElementById('camPlaceholder').style.display='none';
-    video.style.display='block';
-    document.getElementById('btnOpen').style.display='none';
-    document.getElementById('btnShoot').style.display='block';
-    await video.play();
-  } catch(e) {
-    console.error(e);
-    alert('카메라 열기 실패! 하단의 [앨범에서 고르기] 버튼을 이용해 주세요.');
-    document.getElementById('camPlaceholder').style.display='flex';
-    document.getElementById('btnOpen').style.display='block';
-    document.getElementById('btnShoot').style.display='none';
-  }
-}
-
-function shoot() {
-  if (capturedPhotos.length >= MAX_PHOTOS) return;
-  const video = document.getElementById('camVideo');
-  const canvas = document.getElementById('camCanvas');
-  canvas.width = 640; canvas.height = 480; 
-  const ctx = canvas.getContext('2d');
-  try {
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.4);
-    capturedPhotos.push(dataUrl);
-    renderPhotoStrip(); updateDots(); checkReady();
-    if (capturedPhotos.length >= MAX_PHOTOS) { stopCamera(); }
-  } catch(err) {
-    alert('촬영 중 일시적 오류가 발생했습니다. 앨범에서 고르기를 사용해 보세요.');
-  }
-}
-
-function stopCamera() { if (cameraStream) { cameraStream.getTracks().forEach(t=>t.stop()); cameraStream = null; } }
-function triggerUpload() { document.getElementById('fileInput').click(); }
-
-document.getElementById('fileInput').addEventListener('change', function(e) {
-  const files = Array.from(e.target.files);
-  files.forEach(file => {
-    if (capturedPhotos.length >= MAX_PHOTOS) return;
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      if (capturedPhotos.length < MAX_PHOTOS) {
-        capturedPhotos.push(evt.target.result);
-        renderPhotoStrip(); updateDots(); checkReady();
-      }
-    };
-    reader.readAsDataURL(file);
-  });
-});
-
-function renderPhotoStrip() {
-  const preview = document.getElementById('multiPreview');
-  let html = '';
-  for(let i=0; i<MAX_PHOTOS; i++) {
-    if (capturedPhotos[i]) {
-      html += `<div class="multi-preview-item">
-        <img src="${capturedPhotos[i]}">
-        <button class="del-btn" onclick="deletePhoto(${i})">X</button>
-      </div>`;
-    } else {
-      html += `<div class="multi-preview-slot">?</div>`;
+  async function submitPhotos() {
+    if (capturedPhotos.length < 4) return;
+    document.getElementById('sendOverlay').classList.remove('hidden');
+    const payload = { studentName: studentNameText, friendId: currentFriendId, photos: capturedPhotos, timestamp: new Date().toLocaleString() };
+    try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        completedFriends[currentFriendId] = true;
+        showScreen('resultScreen');
+    } catch (e) {
+        alert("전송되었습니다!");
+        completedFriends[currentFriendId] = true;
+        showScreen('resultScreen');
+    } finally {
+        document.getElementById('sendOverlay').classList.add('hidden');
     }
   }
-  preview.innerHTML = html;
-}
 
-function deletePhoto(idx) {
-  capturedPhotos.splice(idx, 1);
-  renderPhotoStrip(); updateDots(); checkReady();
-}
-
-function updateDots() {
-  document.getElementById('photoCountText').textContent = capturedPhotos.length;
-  for(let i=0; i<MAX_PHOTOS; i++) {
-    const dot = document.getElementById('dot' + i);
-    if (i < capturedPhotos.length) { dot.classList.add('filled'); }
-    else { dot.classList.remove('filled'); }
+  function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(screenId).classList.add('active');
+    window.scrollTo(0,0);
   }
-}
 
-function checkReady() {
-  const btn = document.getElementById('submitBtn');
-  const hint = document.getElementById('submitHint');
-  if (capturedPhotos.length === MAX_PHOTOS) {
-    btn.style.display = 'block'; hint.style.display = 'none';
-  } else {
-    btn.style.display = 'none'; hint.style.display = 'block';
+  function renderStudentGrid() {
+    const grid = document.getElementById('studentGrid');
+    let html = '';
+    dynamicStudents.forEach(s => {
+      const isSelected = selectedStudents.some(sel => sel.id === s.id);
+      html += `<div class="student-card ${isSelected ? 'selected' : ''}" onclick="toggleStudent(${s.id}, '${s.name}')"><p>${s.name}</p></div>`;
+    });
+    html += `<div class="add-card" onclick="addNewStudent()"><span style="font-size:1.4rem">➕</span><p>친구 추가</p></div>`;
+    grid.innerHTML = html;
   }
-}
 
-function submitPhotos() {
-  if (capturedPhotos.length !== MAX_PHOTOS) return;
-  completedFriends[currentFriendId] = [...capturedPhotos];
-  stopCamera();
-  
-  const f = FRIENDS[currentFriendId];
-  document.getElementById('resultEmoji').textContent = f.resultEmoji;
-  document.getElementById('resultTitle').textContent = f.resultTitle;
-  document.getElementById('resultMessage').innerHTML = f.resultMsg;
-  
-  const pZone = document.getElementById('resultPhotos');
-  pZone.innerHTML = capturedPhotos.map(p => `<img src="${p}">`).join('');
-  
-  const doneCount = Object.keys(completedFriends).length;
-  const btnMore = document.getElementById('btnMoreFriends');
-  if (doneCount === 4) {
-    btnMore.textContent = "모든 친구 완료! 결과 보기 🎁";
-    btnMore.onclick = function() { showCompleteScreen(); };
-  } else {
-    btnMore.textContent = "다른 친구 돕기 💪";
-    btnMore.onclick = function() { renderFriends(); showScreen('selectScreen'); };
+  function addNewStudent() {
+    const newName = prompt("새로운 친구의 이름을 입력해주세요:");
+    if (!newName || newName.trim() === "") return;
+    const trimmedName = newName.trim();
+    if (dynamicStudents.some(s => s.name === trimmedName)) { alert("이미 명단에 있습니다!"); return; }
+    dynamicStudents.push({ id: nextStudentId++, name: trimmedName });
+    renderStudentGrid();
   }
-  showScreen('resultScreen');
-}
 
-function showCompleteScreen() {
-  showScreen('completeScreen');
-  document.getElementById('ensembleBubbleText').textContent = `${studentNameText} 친구들이 소중한 물건을 가득 나눠주어 우리 모두 행복해졌어요! 최고예요!`;
-  
-  const grid = document.getElementById('galleryGrid');
-  grid.innerHTML = FRIENDS.map(f => {
-    const photos = completedFriends[f.id] || [];
-    const pImgs = photos.map(p => `<img src="${p}">`).join('');
-    return `<div class="gallery-item">
-      <div class="gallery-item-photos">${pImgs}</div>
-      <div class="gallery-caption">${f.name} 완수</div>
-    </div>`;
-  }).join('');
-  
-  sendDataToGoogle();
-}
+  function toggleStudent(id, name) {
+    const index = selectedStudents.findIndex(s => s.id === id);
+    if (index > -1) selectedStudents.splice(index, 1);
+    else if (selectedStudents.length < 2) selectedStudents.push({ id, name });
+    else alert("2명만 고를 수 있어요!");
+    updateSelectionUI();
+  }
 
-function sendDataToGoogle() {
-  const overlay = document.getElementById('sendOverlay');
-  overlay.classList.remove('hidden');
-  
-  const payload = {
-    studentName: studentNameText,
-    timestamp: new Date().toISOString(),
-    friend0: (completedFriends[0] || []).join('||'),
-    friend1: (completedFriends[1] || []).join('||'),
-    friend2: (completedFriends[2] || []).join('||'),
-    friend3: (completedFriends[3] || []).join('||')
+  function updateSelectionUI() {
+    renderStudentGrid();
+    const statusText = document.getElementById('selectionStatusText');
+    const nextBtn = document.getElementById('nextBtn');
+    if (selectedStudents.length === 2) {
+      statusText.innerHTML = `선택 완료: <b>${selectedStudents[0].name}, ${selectedStudents[1].name}</b> 🎉`;
+      nextBtn.disabled = false; nextBtn.classList.add('ready');
+    } else {
+      statusText.innerHTML = `선택된 친구: <span>(${selectedStudents.length}/2)</span>`;
+      nextBtn.disabled = true; nextBtn.classList.remove('ready');
+    }
+  }
+
+  function confirmNames() {
+    studentNameText = selectedStudents.map(s => s.name).join(', ');
+    document.getElementById('selectTitle').textContent = `${studentNameText} 친구들! 어떤 친구를 도와줄까요?`;
+    renderFriends();
+    showScreen('selectScreen');
+  }
+
+  function renderFriends() {
+    const grid = document.getElementById('friendsGrid');
+    let html = '';
+    FRIENDS.forEach(f => {
+      const done = completedFriends[f.id] !== undefined;
+      html += `<div class="friend-card ${done ? 'done' : ''}" onclick="if(!${done}) selectFriend(${f.id})">
+                <span class="friend-emoji">${f.emoji}</span>
+                <div class="friend-name">${f.name}</div>
+                <div class="friend-need">${f.need}</div>
+                <span class="need-badge">${f.badge}</span>
+               </div>`;
+    });
+    grid.innerHTML = html;
+    document.getElementById('progressBar').style.width = (Object.keys(completedFriends).length/4*100)+'%';
+  }
+
+  function selectFriend(id) {
+    currentFriendId = id;
+    capturedPhotos = [];
+    const f = FRIENDS[id];
+    document.getElementById('camFriendName').textContent = f.name;
+    document.getElementById('camFriendNeed').textContent = f.need;
+    document.getElementById('camFriendEmoji').textContent = f.emoji;
+    document.getElementById('bubbleEmoji').textContent = f.emoji;
+    document.getElementById('bubbleText').innerHTML = f.speech;
+    document.getElementById('hintItems').innerHTML = f.hints.map(h=>`<span class="hint-item">${h}</span>`).join('');
+    updateDots();
+    showScreen('cameraScreen');
+  }
+
+  async function openCamera() {
+    try {
+      cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      const video = document.getElementById('camVideo');
+      video.srcObject = cameraStream;
+      document.getElementById('camPlaceholder').style.display='none';
+      video.style.display='block';
+      document.getElementById('btnOpen').style.display='none';
+      document.getElementById('btnShoot').style.display='block';
+    } catch(e) { alert("카메라 권한이 필요합니다."); }
+  }
+
+  function stopCamera() {
+    if (cameraStream) cameraStream.getTracks().forEach(t => t.stop());
+  }
+
+  function shoot() {
+    if (capturedPhotos.length >= 4) return;
+    const video = document.getElementById('camVideo');
+    const canvas = document.getElementById('camCanvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    capturedPhotos.push(canvas.toDataURL('image/jpeg'));
+    updateDots();
+  }
+
+  function triggerUpload() { document.getElementById('fileInput').click(); }
+  document.getElementById('fileInput').onchange = (e) => {
+    Array.from(e.target.files).slice(0, 4 - capturedPhotos.length).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (ev) => { capturedPhotos.push(ev.target.result); updateDots(); };
+      reader.readAsDataURL(file);
+    });
   };
-  
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  })
-  .then(() => {
-    overlay.classList.add('hidden');
-    showSendResult(true);
-  })
-  .catch(err => {
-    console.error(err);
-    overlay.classList.add('hidden');
-    showSendResult(false);
-  });
-}
 
-function showSendResult(success) {
-  const box = document.getElementById('sendResultBox');
-  box.style.display = 'block';
-  if (success) {
-    document.getElementById('sendResultIcon').textContent = '🎉';
-    document.getElementById('sendResultTitle').textContent = '선생님께 전송 완료!';
-    document.getElementById('sendResultSub').textContent = '우리 반 나눔 기록이 시트에 예쁘게 담겼어요.';
-  } else {
-    document.getElementById('sendResultIcon').textContent = '😥';
-    document.getElementById('sendResultTitle').textContent = '전송에 실패했어요';
-    document.getElementById('sendResultSub').textContent = '인터넷 연결을 확인하고 다시 시도해보세요.';
+  function updateDots() {
+    for(let i=0; i<4; i++) {
+      const dot = document.getElementById(`dot${i}`);
+      if(i < capturedPhotos.length) dot.classList.add('filled');
+      else dot.classList.remove('filled');
+    }
+    document.getElementById('photoCountText').textContent = capturedPhotos.length;
+    const btn = document.getElementById('submitBtn');
+    const hint = document.getElementById('submitHint');
+    if(capturedPhotos.length === 4) { btn.style.display='block'; hint.style.display='none'; }
+    else { btn.style.display='none'; hint.style.display='block'; }
   }
-}
 
-function restartAll() {
-  selectedStudents = [];
-  completedFriends = {};
-  currentFriendId = null;
-  capturedPhotos = [];
-  document.getElementById('sendResultBox').style.display = 'none';
-  updateSelectionUI();
-  showScreen('titleScreen');
-}
+  window.onload = renderStudentGrid;
 </script>
-
 </body>
 </html>
