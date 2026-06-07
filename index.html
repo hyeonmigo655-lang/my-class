@@ -75,7 +75,7 @@
     transition: all 0.2s ease; position: relative; display: flex; align-items: center; justify-content: center;
     min-height: 70px;
   }
-  .student-card p { font-size: 1.3rem; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .student-card p { font-size: 1.3rem; color: var(--dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
   .student-card.selected { border-color: #6BCB77; background-color: #E8F5E9; transform: scale(1.03); }
   .student-card.selected::after {
     content: '✔'; position: absolute; top: 6px; right: 6px;
@@ -90,7 +90,7 @@
     min-height: 70px; transition: all 0.2s;
   }
   .add-card:hover { background: #FFEAA7; transform: translateY(-2px); }
-  .add-card p { font-size: 1.05rem; color: #E58E26; font-weight: bold; }
+  .add-card p { font-size: 1.05rem; color: #E58E26; font-weight: bold; pointer-events: none; }
 
   .selection-bar {
     background: white; border-radius: 20px; padding: 15px 20px;
@@ -499,29 +499,48 @@ function updateSelectionUI() {
   }
 }
 
+// 다음 활동으로 넘어갈 때 꼬이던 순서를 완벽히 고정
 function confirmNames() {
   if (selectedStudents.length !== 2) return;
   studentNameText = `${selectedStudents[0].name}, ${selectedStudents[1].name}`;
+  
+  // 1. 글자 먼저 안전하게 교체
   document.getElementById('selectTitle').textContent = `${studentNameText} 친구들! 어떤 친구를 도와줄까요?`;
+  
+  // 2. 중요!! 목록을 확실하게 먼저 그리고 나서 화면을 전환
   renderFriends();
   showScreen('selectScreen');
 }
 
 function renderFriends() {
   const grid = document.getElementById('friendsGrid');
+  if (!grid) return; // 방어 코드 추가
+  
   const doneCount = Object.keys(completedFriends).length;
-  grid.innerHTML = FRIENDS.map(f => {
+  
+  // 패드 환경에서 클릭이 100% 되도록 함수를 분리하여 단단하게 정렬
+  let html = '';
+  FRIENDS.forEach(f => {
     const done = completedFriends[f.id] !== undefined;
-    // 클릭 이벤트 오작동 방지를 위해 인라인 바인딩을 강력하게 수정
-    return `<div class="friend-card${done?' done':''}" data-id="${f.id}" onclick="if(!${done}) { selectFriend(${f.id}); }">
-      <span class="friend-emoji">${f.emoji}</span>
-      <div class="friend-name">${f.name}</div>
-      <div class="friend-need">${f.need}</div>
-      <span class="need-badge">${f.badge}</span>
-    </div>`;
-  }).join('');
+    html += `
+      <div class="friend-card ${done ? 'done' : ''}" data-id="${f.id}" onclick="handleFriendClick(${f.id}, ${done})">
+        <span class="friend-emoji">${f.emoji}</span>
+        <div class="friend-name">${f.name}</div>
+        <div class="friend-need">${f.need}</div>
+        <span class="need-badge">${f.badge}</span>
+      </div>
+    `;
+  });
+  
+  grid.innerHTML = html;
   document.getElementById('progressBar').style.width = (doneCount/4*100)+'%';
   document.getElementById('progressLabel').textContent = `${doneCount} / 4 명 도움 완료`;
+}
+
+// 인라인 오류 방지를 위한 독립 클릭 핸들러 작동 구조 구현
+function handleFriendClick(id, isDone) {
+  if (isDone) return;
+  selectFriend(id);
 }
 
 function selectFriend(id) {
@@ -567,7 +586,6 @@ async function openCamera() {
   } catch(e) {
     console.error(e);
     alert('카메라 열기 실패! 하단의 [앨범에서 고르기] 버튼을 이용해 주세요.');
-    // 카메라가 막혀도 강제로 레이아웃 유지되도록 예외 처리
     document.getElementById('camPlaceholder').style.display='flex';
     document.getElementById('btnOpen').style.display='block';
     document.getElementById('btnShoot').style.display='none';
