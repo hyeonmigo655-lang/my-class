@@ -658,7 +658,7 @@ async function sendToGoogle() {
       timestamp: new Date().toLocaleString('ko-KR'),
       friends: FRIENDS.map(f => ({ name: f.name, photos: completedFriends[f.id] || [] }))
     };
-    const res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+    const res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST',  mode: 'no-cors', body: JSON.stringify(payload) });
     document.getElementById('sendOverlay').classList.add('hidden');
     if (res.ok) { 
       showSendResult(true, '전송 완료! 📬', `선생님께 ${studentNameText}의\n나눔 사진이 성공적으로 전달됐어요!`); 
