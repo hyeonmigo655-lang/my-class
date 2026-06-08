@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>나눔 친구들 — 선생님 갤러리</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@400;700&display=swap');
+
+  :root {
+    --bg: #fdf6ee;
+    --card: #fff;
+    --accent: #ff7043;
+    --accent2: #42a5f5;
+    --text: #2d2d2d;
+    --sub: #888;
+    --border: #f0e6d8;
+    --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--card);
+    border-bottom: 2px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  header h1 {
+    font-family: 'Gowun Dodum', sans-serif;
+    font-size: 1.5rem;
+    color: var(--accent);
+  }
+
+  header span {
+    font-size: 0.85rem;
+    color: var(--sub);
+  }
+
+  .refresh-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: opacity 0.2s;
+  }
+  .refresh-btn:hover { opacity: 0.85; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--sub);
+    font-size: 1.1rem;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--sub);
+  }
+  .empty .emoji { font-size: 3rem; margin-bottom: 12px; }
+
+  /* 학생 카드 */
+  .student-card {
+    background: var(--card);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 32px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    animation: fadeIn 0.4s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .student-header {
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, #fff8f5, #fff);
+  }
+
+  .student-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), #ff8a65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .student-info h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .student-info .time {
+    font-size: 0.8rem;
+    color: var(--sub);
+    margin-top: 2px;
+  }
+
+  .photo-count {
+    margin-left: auto;
+    background: var(--accent);
+    color: white;
+    border-radius: 12px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+  }
+
+  /* 친구별 섹션 */
+  .friends-grid {
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  @media (max-width: 600px) {
+    .friends-grid { grid-template-columns: 1fr; padding: 16px; }
+    header { padding: 14px 16px; }
+    header h1 { font-size: 1.1rem; }
+  }
+
+  .friend-section h3 {
+    font-size: 0.9rem;
+    color: var(--accent2);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .photos-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .photo-thumb {
+    aspect-ratio: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--border);
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .photo-thumb:hover { transform: scale(1.05); }
+  .photo-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .photo-thumb.empty-slot {
+    background: #f5f0eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+    font-size: 1.2rem;
+  }
+
+  /* 라이트박스 */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 90vw;
+    max-height: 80vh;
+    border-radius: 16px;
+    object-fit: contain;
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    color: white;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .lightbox-caption {
+    color: white;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+  }
+  .stat strong { color: var(--accent); font-size: 1.3rem; display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌟 나눔 친구들 갤러리</h1>
+  <span id="lastUpdate"></span>
+  <button class="refresh-btn" onclick="loadData()">🔄 새로고침</button>
+</header>
+
+<div class="container">
+  <div class="stats-bar" id="statsBar"></div>
+  <div id="content"><div class="loading">📷 사진 불러오는 중...</div></div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close">✕</span>
+  <img id="lightboxImg" src="" alt="">
+  <div class="lightbox-caption" id="lightboxCaption"></div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ebyclzaktmbtofluzovl.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVieWNsemFrdG1idG9mbHV6b3ZsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA4NTg1ODMsImV4cCI6MjA5NjQzNDU4M30.MyHJltd9zVgvdHyUSasqGreZkCbw7YcND6e1qMKszWs';
+
+const FRIEND_ICONS = {
+  '배고픈': '🍎',
+  '추운': '🧣',
+  '아픈': '💊',
+  '심심한': '🎮'
+};
+
+function getFriendIcon(name) {
+  for (const [key, icon] of Object.entries(FRIEND_ICONS)) {
+    if (name.includes(key)) return icon;
+  }
+  return '💛';
+}
+
+async function loadData() {
+  document.getElementById('content').innerHTML = '<div class="loading">📷 사진 불러오는 중...</div>';
+  document.getElementById('statsBar').innerHTML = '';
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/submissions?select=*&order=id.desc`, {
+      headers: {
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'apikey': SUPABASE_KEY
+      }
+    });
+    const data = await res.json();
+
+    if (!data || data.length === 0) {
+      document.getElementById('content').innerHTML = `
+        <div class="empty">
+          <div class="emoji">📭</div>
+          <p>아직 제출된 사진이 없어요</p>
+        </div>`;
+      return;
+    }
+
+    // 통계
+    const totalPhotos = data.reduce((sum, row) => {
+      const friends = row.friends || [];
+      return sum + friends.reduce((s, f) => s + (f.photos?.length || 0), 0);
+    }, 0);
+
+    document.getElementById('statsBar').innerHTML = `
+      <div class="stat"><strong>${data.length}</strong>팀 제출</div>
+      <div class="stat"><strong>${totalPhotos}</strong>장 사진</div>
+    `;
+
+    document.getElementById('lastUpdate').textContent = `마지막 업데이트: ${new Date().toLocaleTimeString('ko-KR')}`;
+
+    let html = '';
+    data.forEach((row, idx) => {
+      const friends = row.friends || [];
+      const photoCount = friends.reduce((s, f) => s + (f.photos?.length || 0), 0);
+      const initials = (row.student_name || '?')[0];
+
+      html += `
+        <div class="student-card" style="animation-delay:${idx * 0.05}s">
+          <div class="student-header">
+            <div class="student-avatar">${initials}</div>
+            <div class="student-info">
+              <h2>${row.student_name || '이름 없음'}</h2>
+              <div class="time">${row.timestamp || ''}</div>
+            </div>
+            <div class="photo-count">📷 ${photoCount}장</div>
+          </div>
+          <div class="friends-grid">
+            ${friends.map(f => `
+              <div class="friend-section">
+                <h3>${getFriendIcon(f.name)} ${f.name}</h3>
+                <div class="photos-row">
+                  ${(f.photos || []).map(url => `
+                    <div class="photo-thumb" onclick="openLightbox('${url}', '${row.student_name} — ${f.name}')">
+                      <img src="${url}" alt="${f.name}" loading="lazy" onerror="this.parentElement.innerHTML='❌'">
+                    </div>
+                  `).join('')}
+                  ${Array(Math.max(0, 4 - (f.photos?.length || 0))).fill('<div class="photo-thumb empty-slot">📷</div>').join('')}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>`;
+    });
+
+    document.getElementById('content').innerHTML = html;
+
+  } catch(e) {
+    document.getElementById('content').innerHTML = `<div class="empty"><div class="emoji">😢</div><p>오류: ${e.message}</p></div>`;
+  }
+}
+
+function openLightbox(url, caption) {
+  document.getElementById('lightboxImg').src = url;
+  document.getElementById('lightboxCaption').textContent = caption;
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+loadData();
+// 30초마다 자동 새로고침
+setInterval(loadData, 30000);
+</script>
+</body>
+</html>
