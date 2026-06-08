@@ -719,7 +719,7 @@ async function sendToGoogle() {
         const blob = new Blob([array], { type: 'image/jpeg' });
 
         
-        const fileName = `${studentNameText}_${f.name}_${i+1}.jpg`;
+        const safeName = studentNameText.replace(/[, ]+/g, '_'); const safeFriend = f.name.replace(/[ ]+/g, '_'); const fileName = `${safeName}_${safeFriend}_${i+1}.jpg`;
 
         // Supabase Storage 업로드
         const uploadRes = await fetch(`${SUPABASE_URL}/storage/v1/object/photos/${encodeURIComponent(fileName)}`, {
